@@ -10,7 +10,7 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 const Navigation = lazy(() => import("./components/Navigation/Navigation"));
 
 export default function App() {
-  const [isOpenMobileMenu, setIsOpenMobileMenu] = useState("false");
+  const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
   const onOpenMobileMenu = () => {
     setIsOpenMobileMenu((prev) => !prev);
   };
