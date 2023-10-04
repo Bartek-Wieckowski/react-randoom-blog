@@ -1,0 +1,117 @@
+.hero {
+  position: relative;
+  height: 850px;
+  background-color: var(--main-color);
+
+  &__carousel {
+    position: fixed;
+    width: 100%;
+    padding-top: 200px;
+    text-align: center;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background-color: rgb(0 0 0 / 10%);
+      left: 50%;
+      top: 60%;
+      margin: -100px;
+      border-radius: 50%;
+      z-index: -1;
+    }
+    &::after {
+      transform: scale(2);
+    }
+  }
+  &__swiper-wrapper {
+    max-width: 830px;
+    margin: 0 auto;
+    padding: 0 2em;
+  }
+
+  .swiper {
+    padding-bottom: 75px;
+  }
+
+  .slide-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5em;
+
+    &__title a {
+      background-image: linear-gradient(transparent 98%, var(--secondary-color));
+      background-repeat: no-repeat;
+      background-size: 0% 100%;
+      transition: all 0.7s;
+    }
+
+    &__title a:hover {
+      background-size: 100% 100%;
+    }
+    &__meta {
+      color: #fff;
+      span {
+        font-family: "Libre Bodon";
+        position: relative;
+        display: inline-block;
+        padding: 0 1em;
+        &::before {
+          content: "";
+          position: absolute;
+          top: 11px;
+          left: 0;
+          width: 5px;
+          height: 5px;
+          background-color: var(--dark-color);
+          border-radius: 50%;
+          opacity: 0.35;
+        }
+      }
+    }
+    &__btn {
+      font-size: 12px;
+      font-weight: 500px;
+      width: 150px;
+      display: inline-block;
+      text-align: center;
+      line-height: 42px;
+      text-transform: uppercase;
+      -webkit-transition: all 0.3s ease-out;
+      transition: all 0.3s ease-out;
+      &.read-more {
+        background-color: #fff;
+        border: 1px solid white;
+        color: var(--dark-color);
+        margin: 0 auto;
+        box-shadow: var(--main-box-shadow);
+        &:hover {
+          background-color: transparent;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+.swiper-pagination .swiper-pagination-bullet-active {
+  position: relative;
+  background-color: var(--secondary-color);
+}
+
+.swiper .swiper-pagination .swiper-pagination-bullet-active::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: 0;
+  left: 0;
+  right: 0.5em;
+  transform: scale(2);
+  opacity: 0.3;
+  z-index: -1;
+  border-radius: 50%;
+  background-color: var(--secondary-color);
+}
