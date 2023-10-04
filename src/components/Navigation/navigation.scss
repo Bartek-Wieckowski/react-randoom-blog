@@ -1,0 +1,54 @@
+.page-header {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  padding: 25px 0;
+  z-index: 1001;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-trigger {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25em;
+  color: white;
+  transition: background-color 0.3s;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  order: 12;
+
+  &:hover {
+    background-color: rgb(255 255 255 / 20%);
+  }
+  & i:last-child {
+    display: none;
+  }
+}
+.showmenu {
+  & .menu-trigger {
+    z-index: 10001;
+
+    & i:first-child,
+    i:last-child {
+      display: none;
+    }
+    & i:last-child {
+      display: block;
+    }
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .menu-trigger {
+    display: none;
+  }
+}

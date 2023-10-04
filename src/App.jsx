@@ -1,13 +1,23 @@
 import "./styles/global.scss";
-import { Suspense, lazy } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Suspense, lazy, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
+// pages
 const Home = lazy(() => import("./pages/Home/Home"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
+// components
+const Navigation = lazy(() => import("./components/Navigation/Navigation"));
+
 export default function App() {
+  const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
+  const onOpenMobileMenu = () => {
+    setIsOpenMobileMenu((prev) => !prev);
+  };
+
   return (
-    <div id="page" className="page">
+    <div id="page" className={`page ${isOpenMobileMenu ? "showmenu" : ""}`}>
+      <Navigation onOpenMobileMenu={onOpenMobileMenu} />
       <Suspense>
         <Routes>
           <Route path="/" exact element={<Home />} />

@@ -1,0 +1,13 @@
+.logo {
+  color: #fff;
+  a {
+    font-size: 1.75em;
+    font-weight: 600;
+    letter-spacing: -2px;
+
+    span {
+      color: var(--dark-color);
+      opacity: 0.5;
+    }
+  }
+}
