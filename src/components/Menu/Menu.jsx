@@ -1,46 +1,76 @@
 import { Link } from "react-router-dom";
 import Showcase from "../Showcase/Showcase";
 import "./menu.scss";
+import { useRef } from "react";
 
 export default function Menu() {
+  const elementCategory = useRef(null);
+  const toggleExpandClass = () => {
+    if (elementCategory.current) {
+      elementCategory.current.classList.toggle("expand");
+    }
+  };
+
   return (
     <div className="menu">
       <Showcase />
-      <ul className="main-menu-list">
-        <li>
-          <Link to="/">Home</Link>
+      <ul className="menu__list">
+        <li className="menu__item">
+          <Link to="/" className="menu__link">
+            Home
+          </Link>
         </li>
-        <li>
-          <Link to="/popular">Popularne</Link>
+        <li className="menu__item">
+          <Link to="/popular" className="menu__link">
+            Popularne
+          </Link>
         </li>
-        <li className="has-child">
-          <Link to="/category">Kategorie</Link>
-          <ul className="sub-menu-list">
-            <li>
-              <Link to="/">Technologia i Gadżety</Link>
+        <li className="menu__item menu__item--has-child" ref={elementCategory}>
+          <p className="menu__link menu__link--category" onClick={() => toggleExpandClass()}>
+            Kategorie
+          </p>
+          <ul className="menu__sub-list">
+            <li className="menu__sub-item">
+              <Link to="/" className="menu__sub-link">
+                Technologia i Gadżety
+              </Link>
             </li>
-            <li>
-              <Link to="/">Kuchnia i Przepisy Kulinarne</Link>
+            <li className="menu__sub-item">
+              <Link to="/" className="menu__sub-link">
+                Kuchnia i Przepisy Kulinarne
+              </Link>
             </li>
-            <li>
-              <Link to="/">Zdrowie i Fitness</Link>
+            <li className="menu__sub-item">
+              <Link to="/" className="menu__sub-link">
+                Zdrowie i Fitness
+              </Link>
             </li>
-            <li>
-              <Link to="/">Moda i Styl</Link>
+            <li className="menu__sub-item">
+              <Link to="/" className="menu__sub-link">
+                Moda i Styl
+              </Link>
             </li>
-            <li>
-              <Link to="/">Humor i Rozrywka</Link>
+            <li className="menu__sub-item">
+              <Link to="/" className="menu__sub-link">
+                Humor i Rozrywka
+              </Link>
             </li>
           </ul>
         </li>
-        <li>
-          <Link to="/login">Logowanie</Link>
+        <li className="menu__item">
+          <Link to="/login" className="menu__link">
+            Logowanie
+          </Link>
         </li>
-        <li>
-          <Link to="/register">Rejestracja</Link>
+        <li className="menu__item">
+          <Link to="/register" className="menu__link">
+            Rejestracja
+          </Link>
         </li>
-        <li>
-          <Link to="/contact">Kontakt</Link>
+        <li className="menu__item">
+          <Link to="/contact" className="menu__link">
+            Kontakt
+          </Link>
         </li>
       </ul>
     </div>
