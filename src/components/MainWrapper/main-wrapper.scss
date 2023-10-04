@@ -1,0 +1,19 @@
+.main {
+    position: relative;
+    padding: 100px 0;
+    background-color: white;
+    box-shadow: var(--secondary-box-shadow);
+    overflow: hidden;
+    &::before {
+        content: "";
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background-color: var(--main-color);
+        border-radius: 50%;
+        top: -450px;
+        left: 50%;
+        margin-left: -250px;
+        box-shadow: unset;
+    }
+}
