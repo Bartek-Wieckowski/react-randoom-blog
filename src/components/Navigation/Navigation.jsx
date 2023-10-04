@@ -6,6 +6,7 @@ import "./navigation.scss";
 export default function Navigation({ onOpenMobileMenu }) {
   const handleClickMenu = () => {
     onOpenMobileMenu(true);
+    document.body.classList.toggle('overflowme');
   };
 
   return (
@@ -14,7 +15,7 @@ export default function Navigation({ onOpenMobileMenu }) {
         <nav className="nav">
           <Logo />
           <Menu />
-          <button type="button" className="menu-trigger" onClick={handleClickMenu}>
+          <button type="button" className="menu-trigger" onClick={() => handleClickMenu()}>
             <i className="ri-menu-3-line"></i>
             <i className="ri-close-line"></i>
           </button>
