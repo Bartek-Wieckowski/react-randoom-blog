@@ -71,6 +71,17 @@ img {
   padding: 0 2em;
 }
 
+.section {
+  position: relative;
+  background-color: #f1f2f6;
+  z-index: 1003;
+}
+
+.section .container {
+  position: relative;
+  top: -175px;
+}
+
 .overflowme {
   overflow: hidden
 }
