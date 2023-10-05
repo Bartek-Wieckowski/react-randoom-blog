@@ -1,5 +1,5 @@
 import "./posts-list.scss";
 
-export default function PostsList() {
-  return <div>PostsList</div>;
+export default function PostsList({ children }) {
+  return <div className="post__list">{children}</div>;
 }
