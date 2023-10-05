@@ -1,3 +1,13 @@
+@keyframes show {
+  0% {
+    transform: translateY(-60px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .page-header {
   position: fixed;
   width: 100%;
@@ -5,6 +15,12 @@
   right: 0;
   padding: 25px 0;
   z-index: 1001;
+  &.fixed {
+    line-height: 60px;
+    background-color: var(--main-color);
+    z-index: 1100;
+    animation: show 0.3s;
+  }
 }
 .nav {
   display: flex;
