@@ -7,7 +7,7 @@ export default function Home() {
     <section className="home">
         <Slider />
         <MainWrapper>
-          test
+          <h3 className="home__title">Najnowsze posty</h3>
         </MainWrapper>
     </section>
   );
