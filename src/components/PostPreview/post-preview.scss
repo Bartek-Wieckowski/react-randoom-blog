@@ -1,0 +1,78 @@
+.post-preview {
+  position: relative;
+  padding-bottom: 75px;
+  margin-bottom: 75px;
+  display: flex;
+  flex-direction: column;
+  &__title {
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 0.5em;
+
+    a {
+      background-image: linear-gradient(transparent 98%, var(--secondary-color));
+      background-repeat: no-repeat;
+      background-size: 0% 100%;
+      transition: all 0.7s;
+
+      &:hover {
+        background-size: 100% 100%;
+      }
+    }
+  }
+  &__meta {
+    color: var(--grey-color);
+    margin-bottom: 1em;
+    span {
+      font-family: "Libre Bodon";
+      position: relative;
+      display: inline-block;
+      padding: 0 1em;
+      &::before {
+        content: "";
+        position: absolute;
+        top: 11px;
+        left: 0;
+        width: 5px;
+        height: 5px;
+        background-color: var(--dark-color);
+        border-radius: 50%;
+        opacity: 0.35;
+      }
+    }
+    & .author:hover,
+    & a:hover {
+      text-decoration: underline;
+    }
+  }
+  &__content {
+    font-family: "Libre Bodon";
+    font-size: 18px;
+
+    p {
+      margin: 1.5em 0;
+    }
+  }
+  &__btn {
+    font-size: 12px;
+    font-weight: 500;
+    width: 150px;
+    display: inline-block;
+    text-align: center;
+    line-height: 42px;
+    text-transform: uppercase;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    background-color: var(--main-color);
+    margin: 2em 0 0;
+    color: white;
+    border-color: transparent;
+    border: 1px solid #fff;
+
+    &:hover {
+      background-color: transparent;
+      border-color: var(--main-color);
+      color: var(--main-color);
+    }
+  }
+}
