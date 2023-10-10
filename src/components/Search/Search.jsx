@@ -6,6 +6,7 @@ export default function Search() {
   const toggleSearchClass = () => {
     if (elementSearch.current) {
       elementSearch.current.classList.toggle("showsearch");
+      document.body.classList.toggle('overflowme');
     }
   };
 
