@@ -1,6 +1,7 @@
 import "./styles/global.scss";
 import { Suspense, lazy, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import Footer from "./components/Footer/Footer";
 
 // pages
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
+      <Footer />
     </div>
   );
 }
