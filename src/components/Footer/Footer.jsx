@@ -8,10 +8,10 @@ export default function Footer() {
         <div className="container">
           <div className="logo">
             <Link to="/">
-              Sarah <span>.blog</span>
+              rand00m <span>.blog</span>
             </Link>
           </div>
-          <p className="copyright">Created by theBart</p>
+          <p className="copyright">© {new Date().getFullYear()} Created by theBart</p>
         </div>
       </section>
     </footer>
