@@ -32,7 +32,7 @@ export default function PostPreview({ postsData, isLoading }) {
             {documentToReactComponents(post.contentPreview)}
           </section>
           <footer>
-            <Link to="/" className="post-preview__btn read-more">
+            <Link to={`/post/${post.slug}`} className="post-preview__btn read-more">
               Czytaj więcej
             </Link>
           </footer>
