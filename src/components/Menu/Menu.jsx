@@ -21,7 +21,7 @@ export default function Menu() {
           </Link>
         </li>
         <li className="menu__item">
-          <Link to="/popular" className="menu__link">
+          <Link to="/popularne" className="menu__link">
             Popularne
           </Link>
         </li>
@@ -58,17 +58,17 @@ export default function Menu() {
           </ul>
         </li>
         <li className="menu__item">
-          <Link to="/login" className="menu__link">
+          <Link to="/logowanie" className="menu__link">
             Logowanie
           </Link>
         </li>
         <li className="menu__item">
-          <Link to="/register" className="menu__link">
+          <Link to="/rejestracja" className="menu__link">
             Rejestracja
           </Link>
         </li>
         <li className="menu__item">
-          <Link to="/contact" className="menu__link">
+          <Link to="/kontakt" className="menu__link">
             Kontakt
           </Link>
         </li>
