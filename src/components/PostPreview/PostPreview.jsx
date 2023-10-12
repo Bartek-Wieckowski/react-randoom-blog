@@ -8,7 +8,7 @@ export default function PostPreview({ postsData, isLoading }) {
   return (
     <>
       {postsData?.map((post) => (
-        <article className="post-preview" key={post.title}>
+        <article className="post-preview" key={post.postID}>
           <header>
             <h2 className="post-preview__title">
               <Link to="/">{post.title}</Link>
