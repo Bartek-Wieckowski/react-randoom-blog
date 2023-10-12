@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 
 // pages
 const Home = lazy(() => import("./pages/Home/Home"));
+const Popular = lazy(() => import("./pages/Popular/Popular"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
 // components
@@ -26,6 +27,7 @@ export default function App() {
         <Suspense>
           <Routes>
             <Route path="/" exact element={<Home />} />
+            <Route path="/popularne" element={<Popular />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
