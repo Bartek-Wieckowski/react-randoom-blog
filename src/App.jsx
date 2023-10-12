@@ -10,6 +10,9 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 // components
 const Navigation = lazy(() => import("./components/Navigation/Navigation"));
 
+// contexts
+import { PostsProvider } from "./contexts/PostsContext";
+
 export default function App() {
   const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
   const onOpenMobileMenu = () => {
@@ -18,14 +21,16 @@ export default function App() {
 
   return (
     <div id="page" className={`page ${isOpenMobileMenu ? "showmenu" : ""}`}>
-      <Navigation onOpenMobileMenu={onOpenMobileMenu} />
-      <Suspense>
-        <Routes>
-          <Route path="/" exact element={<Home />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </Suspense>
-      <Footer />
+      <PostsProvider>
+        <Navigation onOpenMobileMenu={onOpenMobileMenu} />
+        <Suspense>
+          <Routes>
+            <Route path="/" exact element={<Home />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </Suspense>
+        <Footer />
+      </PostsProvider>
     </div>
   );
 }
