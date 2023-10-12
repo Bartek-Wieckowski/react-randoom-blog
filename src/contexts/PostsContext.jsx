@@ -37,8 +37,9 @@ function PostsProvider({ children }) {
           content_type: "randoomBlogPosts",
         });
         const postsData = response.items.map((item) => {
+          const postID = item.sys.id;
           const { title, author, category, contentPreview, readTime } = item.fields;
-          return { title, author, category, contentPreview, readTime };
+          return { title, author, category, contentPreview, readTime, postID };
         });
         dispatch({ type: "postsPreview/loaded", payload: postsData });
       } catch {
@@ -56,8 +57,9 @@ function PostsProvider({ children }) {
         "fields.popular": true,
       });
       const postsData = response.items.map((item) => {
+        const postID = item.sys.id;
         const { title, author, category, contentPreview, readTime } = item.fields;
-        return { title, author, category, contentPreview, readTime };
+        return { title, author, category, contentPreview, readTime, postID };
       });
       dispatch({ type: "postsPopular/loaded", payload: postsData });
     } catch (error) {
