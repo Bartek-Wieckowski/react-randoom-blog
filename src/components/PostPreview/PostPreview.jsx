@@ -1,36 +1,13 @@
 import { Link } from "react-router-dom";
 import "./post-preview.scss";
-import clientContentful from "../../helpers/contentfulConfig";
-import { useEffect, useState } from "react";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import Spinner from "../Spinner/Spinner";
 
-export default function PostPreview() {
-  const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState([]);
-
-  const getData = async () => {
-    try {
-      const response = await clientContentful.getEntries({
-        content_type: "randoomBlogPosts",
-      });
-      const postsData = response.items.map((item) => {
-        const { title, author, category, contentPreview, readTime } = item.fields;
-        return { title, author, category, contentPreview, readTime };
-      });
-      setLoading(false);
-      setPosts(postsData);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
+export default function PostPreview({ postsData, isLoading }) {
+  if (isLoading) return <Spinner />;
   return (
     <>
-      {posts.map((post) => (
+      {postsData?.map((post) => (
         <article className="post-preview" key={post.title}>
           <header>
             <h2 className="post-preview__title">
