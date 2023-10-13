@@ -8,20 +8,20 @@ export default function PostPreview({ postsData, isLoading }) {
   return (
     <>
       {postsData?.map((post) => (
-        <article className="post-preview" key={post.postID}>
+        <article className="post-preview" key={post?.postID}>
           <header>
             <h2 className="post-preview__title">
-              <Link to="/">{post.title}</Link>
+              <Link to="/">{post?.title}</Link>
             </h2>
             <div className="post-preview__meta">
               <span className="author">
-                <Link to="/">{post.author}</Link>
+                <Link to="/">{post?.author}</Link>
               </span>
               <span className="category">
-                <Link to="/">{post.category}</Link>
+                <Link to="/">{post?.category}</Link>
               </span>
               <span className="read-time">
-                <Link to="/">{post.readTime} min</Link>
+                <Link to="/">{post?.readTime} min</Link>
               </span>
               <span className="comment">
                 <Link to="/">3 komentarze</Link>
@@ -29,7 +29,7 @@ export default function PostPreview({ postsData, isLoading }) {
             </div>
           </header>
           <section className="post-preview__content">
-            {documentToReactComponents(post.contentPreview)}
+            {documentToReactComponents(post?.contentPreview)}
           </section>
           <footer>
             <Link to={`/post/${post.slug}`} className="post-preview__btn read-more">
