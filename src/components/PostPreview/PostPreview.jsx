@@ -4,6 +4,7 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import Spinner from "../Spinner/Spinner";
 
 export default function PostPreview({ postsData, isLoading }) {
+  
   if (isLoading) return <Spinner />;
   return (
     <>
@@ -11,7 +12,7 @@ export default function PostPreview({ postsData, isLoading }) {
         <article className="post-preview" key={post?.postID}>
           <header>
             <h2 className="post-preview__title">
-              <Link to="/">{post?.title}</Link>
+              <Link to={`/post/${post.slug}`}>{post?.title}</Link>
             </h2>
             <div className="post-preview__meta">
               <span className="author">
