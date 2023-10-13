@@ -1,7 +1,7 @@
-import "./post.scss"
+import { useParams } from "react-router-dom";
+import "./post.scss";
 
 export default function Post() {
-  return (
-    <div>Post</div>
-  )
+  const {slug} = useParams();
+  return <div>{slug}</div>;
 }
