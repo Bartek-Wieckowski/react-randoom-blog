@@ -56,16 +56,23 @@
     flex-direction: column;
 
     figure {
-      img {
+      .single-post__article--mainImg {
         height: 400px;
         width: 100%;
         object-fit: cover;
         object-position: top;
       }
     }
+    img:not(.single-post__article--mainImg) {
+      max-width: 245px;
+      height: 100%;
+      margin: 15px 0;
+    }
 
+    footer{
+        margin-top: 20px;
+    }
     .separator {
-      margin-top: 20px;
       font-style: italic;
       color: var(--secondary-color);
     }

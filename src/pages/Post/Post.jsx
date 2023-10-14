@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { usePosts } from "../../contexts/PostsContext";
 import { formatDate } from "../../utils/helpers";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { BLOCKS } from "@contentful/rich-text-types";
 import Hero from "../../components/Hero/Hero";
 import MainWrapper from "../../components/MainWrapper/MainWrapper";
 import Spinner from "../../components/Spinner/Spinner";
@@ -14,6 +15,16 @@ export default function Post() {
   const { slug } = useParams();
   const { isLoading, fetchSinglePost, currentPost } = usePosts();
   const { postID, postRestDetails } = currentPost;
+
+  const options = {
+    renderNode: {
+      [BLOCKS.EMBEDDED_ASSET]: (node) => {
+        const { title, file } = node.data.target.fields;
+        const imageUrl = file.url;
+        return <img src={imageUrl} alt={title} />;
+      },
+    },
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -52,9 +63,9 @@ export default function Post() {
         <PostsList>
           <article className="single-post__article">
             <figure>
-              <img src={postRestDetails?.mainImg.fields.file.url} alt="" />
+              <img src={postRestDetails?.mainImg.fields.file.url} alt="" className="single-post__article--mainImg" />
             </figure>
-            {documentToReactComponents(postRestDetails?.content)}
+            {documentToReactComponents(currentPost.postRestDetails?.content, options)}
             <footer>
               <span className="separator">#tags</span>
               <div className="tags">
