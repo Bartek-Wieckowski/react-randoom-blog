@@ -1,19 +1,47 @@
 .main {
+  position: relative;
+  padding: 100px 0;
+  background-color: white;
+  box-shadow: var(--secondary-box-shadow);
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background-color: var(--main-color);
+    border-radius: 50%;
+    top: -450px;
+    left: 50%;
+    margin-left: -250px;
+    box-shadow: unset;
+  }
+  h3 {
     position: relative;
-    padding: 100px 0;
-    background-color: white;
-    box-shadow: var(--secondary-box-shadow);
-    overflow: hidden;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 2.5em;
+    padding-bottom: 1.5em;
     &::before {
-        content: "";
-        position: absolute;
-        width: 500px;
-        height: 500px;
-        background-color: var(--main-color);
-        border-radius: 50%;
-        top: -450px;
-        left: 50%;
-        margin-left: -250px;
-        box-shadow: unset;
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 50px;
+      height: 1px;
+      margin-left: -25px;
+      background-color: var(--light-color);
     }
+  }
+  article::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 50px;
+    height: 1px;
+    margin-left: -25px;
+    background-color: var(--light-color);
+  }
 }

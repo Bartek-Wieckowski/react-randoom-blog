@@ -9,7 +9,7 @@ import Hero from "../../components/Hero/Hero";
 import MainWrapper from "../../components/MainWrapper/MainWrapper";
 import Spinner from "../../components/Spinner/Spinner";
 import PostsList from "../../components/PostsList/PostsList";
-// import CommentForm from "../../components/CommentForm/CommentForm"
+import CommentForm from "../../components/CommentForm/CommentForm"
 
 export default function Post() {
   const { slug } = useParams();
@@ -77,7 +77,7 @@ export default function Post() {
               </div>
             </footer>
           </article>
-          {/* <CommentForm /> */}
+          <CommentForm />
         </PostsList>
       </MainWrapper>
     </div>
