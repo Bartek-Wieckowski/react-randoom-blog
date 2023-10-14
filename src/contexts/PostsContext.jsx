@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
-import contentfulClient from "../helpers/contentfulConfig";
-import { contentfulContentModel } from "../helpers/contentfulConfig";
+import contentfulClient from "../utils/contentfulConfig";
+import { contentfulContentModel } from "../utils/contentfulConfig";
 
 const PostsContext = createContext();
 
@@ -8,6 +8,7 @@ const initialState = {
   posts: [],
   postsPreview: [],
   postsPopular: [],
+  currentPost: {},
   isLoading: false,
   error: "",
 };
@@ -22,13 +23,18 @@ function reducer(state, action) {
       return { ...state, isLoading: false, postsPreview: action.payload };
     case "postsPopular/loaded":
       return { ...state, isLoading: false, postsPopular: action.payload };
+    case "singlePost/loaded":
+      return { ...state, isLoading: false, currentPost: action.payload };
     default:
       throw new Error("Unknown action type");
   }
 }
 
 function PostsProvider({ children }) {
-  const [{ postsPreview, isLoading, postsPopular }, dispatch] = useReducer(reducer, initialState);
+  const [{ isLoading, postsPreview, postsPopular, currentPost }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   useEffect(() => {
     async function fetchPosts() {
@@ -68,8 +74,34 @@ function PostsProvider({ children }) {
     }
   }, []);
 
+  const fetchSinglePost = useCallback(
+    async (slug) => {
+      if (String(slug) === currentPost.slug) return;
+      dispatch({ type: "loading" });
+      try {
+        const response = await contentfulClient.getEntries({
+          content_type: contentfulContentModel,
+          "fields.slug": slug,
+        });
+        if (response.items.length > 0) {
+          const postItem = response.items[0];
+          const postID = postItem.sys.id;
+          const postRestDetails = postItem.fields;
+          dispatch({ type: "singlePost/loaded", payload: { postID, postRestDetails } });
+        } else {
+          dispatch({ type: "rejected", payload: "Taki post nie istnieje!" });
+        }
+      } catch (error) {
+        dispatch({ type: "rejected", payload: "There was an error loading single post" });
+      }
+    },
+    [currentPost.slug]
+  );
+
   return (
-    <PostsContext.Provider value={{ postsPreview, isLoading, fetchPopularPosts, postsPopular }}>
+    <PostsContext.Provider
+      value={{ isLoading, postsPreview, postsPopular, currentPost, fetchPopularPosts, fetchSinglePost }}
+    >
       {children}
     </PostsContext.Provider>
   );
