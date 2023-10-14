@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import contentfulClient from "../helpers/contentfulConfig";
+import { contentfulContentModel } from "../helpers/contentfulConfig";
 
 const PostsContext = createContext();
 
@@ -34,7 +35,7 @@ function PostsProvider({ children }) {
       dispatch({ type: "loading" });
       try {
         const response = await contentfulClient.getEntries({
-          content_type: "randoomBlogPosts",
+          content_type: contentfulContentModel,
         });
         const postsData = response.items.map((item) => {
           const postID = item.sys.id;
@@ -53,7 +54,7 @@ function PostsProvider({ children }) {
     dispatch({ type: "loading" });
     try {
       const response = await contentfulClient.getEntries({
-        content_type: "randoomBlogPosts",
+        content_type: contentfulContentModel,
         "fields.popular": true,
       });
       const postsData = response.items.map((item) => {
