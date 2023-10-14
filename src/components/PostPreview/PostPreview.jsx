@@ -4,8 +4,7 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import Spinner from "../Spinner/Spinner";
 
 export default function PostPreview({ postsData, isLoading }) {
-  
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner type="small-spinner" />;
   return (
     <>
       {postsData?.map((post) => (

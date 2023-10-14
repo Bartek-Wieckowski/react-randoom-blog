@@ -15,7 +15,6 @@ export default function Post() {
   const { isLoading, fetchSinglePost, currentPost } = usePosts();
   const { postID, postRestDetails } = currentPost;
 
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -24,7 +23,7 @@ export default function Post() {
     fetchSinglePost(slug);
   }, [fetchSinglePost, slug]);
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner type="full-page-spinner" />;
   return (
     <div className="single-post" id={postID}>
       <Hero type="hero__normal">
@@ -57,10 +56,12 @@ export default function Post() {
             </figure>
             {documentToReactComponents(postRestDetails?.content)}
             <footer>
-                <span className="separator">#tags</span>
+              <span className="separator">#tags</span>
               <div className="tags">
                 {postRestDetails?.tags.map((tag) => (
-                  <Link className="btn-tag" key={tag}>{tag}</Link>
+                  <Link className="btn-tag" key={tag}>
+                    {tag}
+                  </Link>
                 ))}
               </div>
             </footer>

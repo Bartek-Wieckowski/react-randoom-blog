@@ -1,8 +1,8 @@
-import "./spinner.scss"
+import "./spinner.scss";
 
-export default function Spinner() {
+export default function Spinner({ type }) {
   return (
-    <div className="spinner-container">
+    <div className={`${type}`}>
       <div className="spinner"></div>
     </div>
   );
