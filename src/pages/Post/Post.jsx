@@ -15,7 +15,6 @@ export default function Post() {
   const { isLoading, fetchSinglePost, currentPost } = usePosts();
   const { postID, postRestDetails } = currentPost;
 
-  console.log(postRestDetails.tags);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -58,6 +57,7 @@ export default function Post() {
             </figure>
             {documentToReactComponents(postRestDetails?.content)}
             <footer>
+                <span className="separator">#tags</span>
               <div className="tags">
                 {postRestDetails?.tags.map((tag) => (
                   <Link className="btn-tag" key={tag}>{tag}</Link>
