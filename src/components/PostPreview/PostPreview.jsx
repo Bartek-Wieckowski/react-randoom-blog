@@ -16,7 +16,7 @@ export default function PostPreview({ postsData, isLoading }) {
             </h2>
             <div className="post-preview__meta">
               <span className="author">
-                <Link to="/">{post?.author}</Link>
+                <Link to="/">{post?.author ? post.author : "Anonim"}</Link>
               </span>
               <span className="category">
                 <Link to="/">{post?.category}</Link>
