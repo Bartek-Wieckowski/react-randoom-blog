@@ -1,7 +1,6 @@
 import "./styles/global.scss";
 import { Suspense, lazy, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import Footer from "./components/Footer/Footer";
 
 // pages
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -11,6 +10,7 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
 // components
 const Navigation = lazy(() => import("./components/Navigation/Navigation"));
+const Footer = lazy(() => import("./components/Footer/Footer"));
 
 // contexts
 import { PostsProvider } from "./contexts/PostsContext";
