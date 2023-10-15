@@ -1,5 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Libre+Bodoni:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap");
 
+@keyframes pulsateActiveLink {
+  0% {
+    transform: scale(1); 
+  }
+  50% {
+    transform: scale(1.2); 
+  }
+  100% {
+    transform: scale(1); 
+  }
+}
+
 :root {
   --main-color: #5f27cd;
   --secondary-color: #ff4757;
