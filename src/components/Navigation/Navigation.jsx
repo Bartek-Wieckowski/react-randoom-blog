@@ -16,27 +16,27 @@ export default function Navigation({ onOpenMobileMenu }) {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const handleClickMenu = () => {
+  const handleToggleMenu = () => {
     onOpenMobileMenu(true);
-    document.body.classList.toggle('overflowme');
+    document.body.classList.toggle("overflowme");
   };
 
-  const navFixedClass = isFixed ? 'fixed' : '';
+  const navFixedClass = isFixed ? "fixed" : "";
 
   return (
     <header className={`page-header ${navFixedClass}`}>
       <div className="container">
         <nav className="nav">
           <Logo />
-          <Menu />
-          <button type="button" className="menu-trigger" onClick={() => handleClickMenu()}>
+          <Menu onOpenMobileMenu={onOpenMobileMenu} />
+          <button type="button" className="menu-trigger" onClick={() => handleToggleMenu()}>
             <i className="ri-menu-3-line"></i>
             <i className="ri-close-line"></i>
           </button>
