@@ -34,6 +34,9 @@
     position: relative;
     width: 100%;
   }
+  &__link.active{
+    animation: pulsateActiveLink 2s infinite;
+  }
   &__link,
   &__sub-link {
     display: flex;
