@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 const Home = lazy(() => import("./pages/Home/Home"));
 const Popular = lazy(() => import("./pages/Popular/Popular"));
 const Post = lazy(() => import("./pages/Post/Post"));
+const Category = lazy(() => import("./pages/Category/Category"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
 // components
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/" exact element={<Home />} />
             <Route path="/popularne" element={<Popular />} />
             <Route path="/post/:slug" element={<Post />} />
+            <Route path="/kategoria/:name" element={<Category />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
