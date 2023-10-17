@@ -9,7 +9,7 @@ import Hero from "../../components/Hero/Hero";
 import MainWrapper from "../../components/MainWrapper/MainWrapper";
 import Spinner from "../../components/Spinner/Spinner";
 import PostsList from "../../components/PostsList/PostsList";
-import CommentForm from "../../components/CommentForm/CommentForm"
+import CommentForm from "../../components/CommentForm/CommentForm";
 
 export default function Post() {
   const { slug } = useParams();
@@ -44,14 +44,14 @@ export default function Post() {
             <div className="meta">
               <span className="date">{formatDate(postRestDetails?.date)}</span>
               <span className="category">
-                <Link to="">{postRestDetails?.category}</Link>
+                <Link to={`/kategoria/${postRestDetails?.categorySlug}`}>{postRestDetails?.category}</Link>
               </span>
               <span className="comment">
                 <Link to="">3 comments</Link>
               </span>
             </div>
             <div className="author">
-              <img src={postRestDetails?.authorPicture.fields.file.url} alt={postRestDetails?.author} />
+              <img src={postRestDetails?.authorPicture?.fields.file.url} alt={postRestDetails?.author} />
               <h4>
                 <Link to="">{postRestDetails?.author}</Link>
               </h4>
@@ -63,7 +63,11 @@ export default function Post() {
         <PostsList>
           <article className="single-post__article">
             <figure>
-              <img src={postRestDetails?.mainImg.fields.file.url} alt="" className="single-post__article--mainImg" />
+              <img
+                src={postRestDetails?.mainImg.fields.file.url}
+                alt=""
+                className="single-post__article--mainImg"
+              />
             </figure>
             {documentToReactComponents(currentPost.postRestDetails?.content, options)}
             <footer>
