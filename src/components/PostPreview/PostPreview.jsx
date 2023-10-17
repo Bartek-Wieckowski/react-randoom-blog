@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import "./post-preview.scss";
+import { Link } from "react-router-dom";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import Spinner from "../Spinner/Spinner";
 
@@ -18,7 +18,7 @@ export default function PostPreview({ postsData, isLoading }) {
                 <Link to="/">{post?.author ? post.author : "Anonim"}</Link>
               </span>
               <span className="category">
-                <Link to="/">{post?.category}</Link>
+                <Link to={`/kategoria/${post.categorySlug}`}>{post?.category}</Link>
               </span>
               <span className="read-time">
                 <Link to="/">{post?.readTime} min</Link>
