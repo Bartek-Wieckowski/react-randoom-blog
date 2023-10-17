@@ -14,9 +14,6 @@ export default function Category() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
     fetchCategoryPost(slug);
   }, [fetchCategoryPost, slug]);
 
@@ -37,7 +34,8 @@ export default function Category() {
       <Hero type="hero__normal">
         <div className="hero__normal-titles">
           <h2 onClick={() => scrollToTarget()}>
-            Poznaj posty z kategorii: <br/>{postsCategory[0]?.category}
+            Poznaj posty z kategorii: <br />
+            {postsCategory[0]?.category}
           </h2>
         </div>
       </Hero>
