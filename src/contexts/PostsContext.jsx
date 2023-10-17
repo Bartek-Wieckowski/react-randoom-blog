@@ -8,6 +8,7 @@ const initialState = {
   posts: [],
   postsPreview: [],
   postsPopular: [],
+  postsCategory: [],
   currentPost: {},
   isLoading: false,
   error: "",
@@ -25,13 +26,15 @@ function reducer(state, action) {
       return { ...state, isLoading: false, postsPopular: action.payload };
     case "singlePost/loaded":
       return { ...state, isLoading: false, currentPost: action.payload };
+    case "postsCategory/loaded":
+      return { ...state, isLoading: false, postsCategory: action.payload };
     default:
       throw new Error("Unknown action type");
   }
 }
 
 function PostsProvider({ children }) {
-  const [{ isLoading, postsPreview, postsPopular, currentPost }, dispatch] = useReducer(
+  const [{ isLoading, postsPreview, postsPopular, currentPost, postsCategory }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -45,8 +48,8 @@ function PostsProvider({ children }) {
         });
         const postsData = response.items.map((item) => {
           const postID = item.sys.id;
-          const { title, author, category, contentPreview, readTime, slug } = item.fields;
-          return { title, author, category, contentPreview, readTime, slug, postID };
+          const { title, author, category, contentPreview, readTime, slug, categorySlug } = item.fields;
+          return { title, author, category, contentPreview, readTime, slug, categorySlug, postID };
         });
         dispatch({ type: "postsPreview/loaded", payload: postsData });
       } catch {
@@ -65,8 +68,8 @@ function PostsProvider({ children }) {
       });
       const postsData = response.items.map((item) => {
         const postID = item.sys.id;
-        const { title, author, category, contentPreview, readTime, slug } = item.fields;
-        return { title, author, category, contentPreview, readTime, slug, postID };
+        const { title, author, category, contentPreview, readTime, slug, categorySlug } = item.fields;
+        return { title, author, category, contentPreview, readTime, slug, categorySlug, postID };
       });
       dispatch({ type: "postsPopular/loaded", payload: postsData });
     } catch (error) {
@@ -98,9 +101,40 @@ function PostsProvider({ children }) {
     [currentPost.slug]
   );
 
+  const fetchCategoryPost = useCallback(async (category) => {
+    dispatch({ type: "loading" });
+    try {
+      const response = await contentfulClient.getEntries({
+        content_type: contentfulContentModel,
+        "fields.categorySlug": category,
+      });
+
+      const postsData = response.items
+        .filter((item) => item.fields.categorySlug === category)
+        .map((item) => {
+          const postID = item.sys.id;
+          const { title, author, category, contentPreview, readTime, slug, categorySlug } = item.fields;
+          return { title, author, category, contentPreview, readTime, slug, categorySlug, postID };
+        });
+      console.log(postsData);
+      dispatch({ type: "postsCategory/loaded", payload: postsData });
+    } catch (error) {
+      dispatch({ type: "rejected", payload: "There was an error loading category post" });
+    }
+  }, []);
+
   return (
     <PostsContext.Provider
-      value={{ isLoading, postsPreview, postsPopular, currentPost, fetchPopularPosts, fetchSinglePost }}
+      value={{
+        isLoading,
+        postsPreview,
+        postsPopular,
+        currentPost,
+        postsCategory,
+        fetchPopularPosts,
+        fetchSinglePost,
+        fetchCategoryPost,
+      }}
     >
       {children}
     </PostsContext.Provider>
