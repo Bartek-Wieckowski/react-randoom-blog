@@ -1,4 +1,5 @@
 import "./post.scss";
+import noSetImg from "../../assets/noSetImg.png";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { usePosts } from "../../contexts/PostsContext";
@@ -28,9 +29,6 @@ export default function Post() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
     fetchSinglePost(slug);
   }, [fetchSinglePost, slug]);
 
@@ -51,7 +49,14 @@ export default function Post() {
               </span>
             </div>
             <div className="author">
-              <img src={postRestDetails?.authorPicture?.fields.file.url} alt={postRestDetails?.author} />
+              <img
+                src={
+                  postRestDetails?.authorPicture?.fields.file.url
+                    ? postRestDetails?.authorPicture?.fields.file.url
+                    : noSetImg
+                }
+                alt={postRestDetails?.author}
+              />
               <h4>
                 <Link to="">{postRestDetails?.author}</Link>
               </h4>
