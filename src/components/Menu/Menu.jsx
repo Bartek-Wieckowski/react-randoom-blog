@@ -1,14 +1,18 @@
 import "./menu.scss";
 import { useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { usePosts } from "../../contexts/PostsContext";
 import Showcase from "../Showcase/Showcase";
+import menuItems from "../../utils/navigationMenu";
 
 export default function Menu({ onOpenMobileMenu }) {
-  const elementCategory = useRef(null);
+  const categoryElementRef = useRef(null);
+  const { fetchCategoryPost } = usePosts();
+  const { pathname: currentPathname } = useLocation();
 
   const toggleExpandClass = () => {
-    if (elementCategory.current) {
-      elementCategory.current.classList.toggle("expand");
+    if (categoryElementRef.current) {
+      categoryElementRef.current.classList.toggle("expand");
     }
   };
 
@@ -17,67 +21,47 @@ export default function Menu({ onOpenMobileMenu }) {
     document.body.classList.remove("overflowme");
   };
 
+  const selectedCategory = (category) => {
+    fetchCategoryPost(category);
+    handleCloseMenu();
+  };
+
   return (
     <div className="menu">
       <Showcase />
       <ul className="menu__list">
-        <li className="menu__item">
-          <NavLink to="/" className="menu__link" onClick={() => handleCloseMenu()}>
-            Home
-          </NavLink>
-        </li>
-        <li className="menu__item">
-          <NavLink to="/popularne" className="menu__link" onClick={() => handleCloseMenu()}>
-            Popularne
-          </NavLink>
-        </li>
-        <li className="menu__item menu__item--has-child" ref={elementCategory}>
-          <p className="menu__link menu__link--category" onClick={() => toggleExpandClass()}>
-            Kategorie
-          </p>
-          <ul className="menu__sub-list">
-            <li className="menu__sub-item">
-              <NavLink to="/" className="menu__sub-link" onClick={() => handleCloseMenu()}>
-                Technologia i Gadżety
+        {menuItems.map((item, index) => (
+          <li
+            key={index}
+            className={`menu__item ${item.hasChild ? "menu__item--has-child" : ""}`}
+            ref={item.hasChild ? categoryElementRef : null}
+          >
+            {item.hasChild ? (
+              <p className="menu__link menu__link--category" onClick={toggleExpandClass}>
+                {item.label}
+              </p>
+            ) : (
+              <NavLink to={item.to} className={"menu__link"} onClick={handleCloseMenu}>
+                {item.label}
               </NavLink>
-            </li>
-            <li className="menu__sub-item">
-              <NavLink to="/" className="menu__sub-link" onClick={() => handleCloseMenu()}>
-                Kuchnia i Przepisy Kulinarne
-              </NavLink>
-            </li>
-            <li className="menu__sub-item">
-              <NavLink to="/" className="menu__sub-link" onClick={() => handleCloseMenu()}>
-                Zdrowie i Fitness
-              </NavLink>
-            </li>
-            <li className="menu__sub-item">
-              <NavLink to="/" className="menu__sub-link" onClick={() => handleCloseMenu()}>
-                Moda i Styl
-              </NavLink>
-            </li>
-            <li className="menu__sub-item">
-              <NavLink to="/" className="menu__sub-link" onClick={() => handleCloseMenu()}>
-                Humor i Rozrywka
-              </NavLink>
-            </li>
-          </ul>
-        </li>
-        <li className="menu__item">
-          <NavLink to="/logowanie" className="menu__link" onClick={() => handleCloseMenu()}>
-            Logowanie
-          </NavLink>
-        </li>
-        <li className="menu__item">
-          <NavLink to="/rejestracja" className="menu__link" onClick={() => handleCloseMenu()}>
-            Rejestracja
-          </NavLink>
-        </li>
-        <li className="menu__item">
-          <NavLink to="/kontakt" className="menu__link" onClick={() => handleCloseMenu()}>
-            Kontakt
-          </NavLink>
-        </li>
+            )}
+            {item.hasChild && (
+              <ul className="menu__sub-list">
+                {item.subItems.map((subItem, subIndex) => (
+                  <li key={subIndex} className="menu__sub-item">
+                    <NavLink
+                      to={subItem.to}
+                      className={`menu__sub-link ${currentPathname === item.to ? "active" : ""}`}
+                      onClick={() => selectedCategory(subItem.slug)}
+                    >
+                      {subItem.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
       </ul>
     </div>
   );
