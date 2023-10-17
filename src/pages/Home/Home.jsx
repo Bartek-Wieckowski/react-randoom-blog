@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Hero from "../../components/Hero/Hero";
 import MainWrapper from "../../components/MainWrapper/MainWrapper";
 import PostPreview from "../../components/PostPreview/PostPreview";
@@ -9,6 +10,10 @@ import "./home.scss";
 
 export default function Home() {
   const { postsPreview, isLoading } = usePosts();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section className="home">
