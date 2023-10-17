@@ -31,7 +31,7 @@ export default function App() {
             <Route path="/" exact element={<Home />} />
             <Route path="/popularne" element={<Popular />} />
             <Route path="/post/:slug" element={<Post />} />
-            <Route path="/kategoria/:name" element={<Category />} />
+            <Route path="/kategoria/:slug" element={<Category />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
