@@ -12,21 +12,28 @@ const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 // components
 const Navigation = lazy(() => import("./components/Navigation/Navigation"));
 const Footer = lazy(() => import("./components/Footer/Footer"));
+import Spinner from "./components/Spinner/Spinner";
 
 // contexts
 import { PostsProvider } from "./contexts/PostsContext";
 
 export default function App() {
   const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
+
+  const isMobileDevice = () => {
+    return window.matchMedia("(max-width: 768px)").matches;
+  };
   const onOpenMobileMenu = () => {
-    setIsOpenMobileMenu((prev) => !prev);
+    if (isMobileDevice()) {
+      setIsOpenMobileMenu((prev) => !prev);
+    }
   };
 
   return (
     <div id="page" className={`page ${isOpenMobileMenu ? "showmenu" : ""}`}>
       <PostsProvider>
         <Navigation onOpenMobileMenu={onOpenMobileMenu} />
-        <Suspense>
+        <Suspense fallback={<Spinner type="full-page-spinner" />}>
           <Routes>
             <Route path="/" exact element={<Home />} />
             <Route path="/popularne" element={<Popular />} />
