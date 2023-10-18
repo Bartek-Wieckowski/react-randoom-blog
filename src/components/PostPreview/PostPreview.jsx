@@ -21,7 +21,7 @@ export default function PostPreview({ postsData, isLoading }) {
                 <Link to={`/kategoria/${post.categorySlug}`}>{post?.category}</Link>
               </span>
               <span className="read-time">
-                <Link to="/">{post?.readTime} min</Link>
+                <Link to={`/czas-czytania/${post?.readTime}`}>{post?.readTime} min</Link>
               </span>
               <span className="comment">
                 <Link to="/">3 komentarze</Link>
