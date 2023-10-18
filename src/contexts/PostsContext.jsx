@@ -10,6 +10,7 @@ const initialState = {
   postsPopular: [],
   postsCategory: [],
   postsAuthor: [],
+  postsReadTime: [],
   currentPost: {},
   isLoading: false,
   error: "",
@@ -31,14 +32,18 @@ function reducer(state, action) {
       return { ...state, isLoading: false, postsCategory: action.payload };
     case "postsAuthor/loaded":
       return { ...state, isLoading: false, postsAuthor: action.payload };
+    case "postsReadTime/loaded":
+      return { ...state, isLoading: false, postsReadTime: action.payload };
     default:
       throw new Error("Unknown action type");
   }
 }
 
 function PostsProvider({ children }) {
-  const [{ isLoading, postsPreview, postsPopular, currentPost, postsCategory, postsAuthor }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { isLoading, postsPreview, postsPopular, currentPost, postsCategory, postsAuthor, postsReadTime },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -63,7 +68,6 @@ function PostsProvider({ children }) {
             postID,
           };
         });
-        console.log(postsData);
         dispatch({ type: "postsPreview/loaded", payload: postsData });
       } catch {
         dispatch({ type: "rejected", payload: "There was an error loading posts" });
@@ -178,6 +182,37 @@ function PostsProvider({ children }) {
       dispatch({ type: "rejected", payload: "There was an error loading author post" });
     }
   }, []);
+  const fetchReadTimePost = useCallback(async (readTimeVal) => {
+    dispatch({ type: "loading" });
+    try {
+      const response = await contentfulClient.getEntries({
+        content_type: contentfulContentModel,
+        "fields.readTime": readTimeVal,
+      });
+
+      const postsData = response.items
+        .filter((item) => item.fields.readTime === readTimeVal)
+        .map((item) => {
+          const postID = item.sys.id;
+          const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug } =
+            item.fields;
+          return {
+            title,
+            author,
+            category,
+            contentPreview,
+            readTime,
+            slug,
+            categorySlug,
+            authorSlug,
+            postID,
+          };
+        });
+      dispatch({ type: "postsReadTime/loaded", payload: postsData });
+    } catch (error) {
+      dispatch({ type: "rejected", payload: "There was an error loading read time all posts" });
+    }
+  }, []);
 
   return (
     <PostsContext.Provider
@@ -188,10 +223,12 @@ function PostsProvider({ children }) {
         currentPost,
         postsCategory,
         postsAuthor,
+        postsReadTime,
         fetchPopularPosts,
         fetchSinglePost,
         fetchCategoryPost,
         fetchAuthorPost,
+        fetchReadTimePost,
       }}
     >
       {children}
