@@ -7,6 +7,7 @@ const Home = lazy(() => import("./pages/Home/Home"));
 const Popular = lazy(() => import("./pages/Popular/Popular"));
 const Post = lazy(() => import("./pages/Post/Post"));
 const Category = lazy(() => import("./pages/Category/Category"));
+import Author from "./pages/Author/Author";
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
 // components
@@ -21,7 +22,7 @@ export default function App() {
   const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
 
   const isMobileDevice = () => {
-    return window.matchMedia("(max-width: 768px)").matches;
+    return window.matchMedia("(max-width: 992px)").matches;
   };
   const onOpenMobileMenu = () => {
     if (isMobileDevice()) {
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/popularne" element={<Popular />} />
             <Route path="/post/:slug" element={<Post />} />
             <Route path="/kategoria/:slug" element={<Category />} />
+            <Route path="/autor/:slug" element={<Author />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
