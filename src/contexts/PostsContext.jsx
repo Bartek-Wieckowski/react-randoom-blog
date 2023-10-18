@@ -9,6 +9,7 @@ const initialState = {
   postsPreview: [],
   postsPopular: [],
   postsCategory: [],
+  postsAuthor: [],
   currentPost: {},
   isLoading: false,
   error: "",
@@ -28,16 +29,16 @@ function reducer(state, action) {
       return { ...state, isLoading: false, currentPost: action.payload };
     case "postsCategory/loaded":
       return { ...state, isLoading: false, postsCategory: action.payload };
+    case "postsAuthor/loaded":
+      return { ...state, isLoading: false, postsAuthor: action.payload };
     default:
       throw new Error("Unknown action type");
   }
 }
 
 function PostsProvider({ children }) {
-  const [{ isLoading, postsPreview, postsPopular, currentPost, postsCategory }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ isLoading, postsPreview, postsPopular, currentPost, postsCategory, postsAuthor }, dispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -48,9 +49,21 @@ function PostsProvider({ children }) {
         });
         const postsData = response.items.map((item) => {
           const postID = item.sys.id;
-          const { title, author, category, contentPreview, readTime, slug, categorySlug } = item.fields;
-          return { title, author, category, contentPreview, readTime, slug, categorySlug, postID };
+          const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug } =
+            item.fields;
+          return {
+            title,
+            author,
+            category,
+            contentPreview,
+            readTime,
+            slug,
+            categorySlug,
+            authorSlug,
+            postID,
+          };
         });
+        console.log(postsData);
         dispatch({ type: "postsPreview/loaded", payload: postsData });
       } catch {
         dispatch({ type: "rejected", payload: "There was an error loading posts" });
@@ -68,8 +81,9 @@ function PostsProvider({ children }) {
       });
       const postsData = response.items.map((item) => {
         const postID = item.sys.id;
-        const { title, author, category, contentPreview, readTime, slug, categorySlug } = item.fields;
-        return { title, author, category, contentPreview, readTime, slug, categorySlug, postID };
+        const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug } =
+          item.fields;
+        return { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug, postID };
       });
       dispatch({ type: "postsPopular/loaded", payload: postsData });
     } catch (error) {
@@ -113,13 +127,55 @@ function PostsProvider({ children }) {
         .filter((item) => item.fields.categorySlug === category)
         .map((item) => {
           const postID = item.sys.id;
-          const { title, author, category, contentPreview, readTime, slug, categorySlug } = item.fields;
-          return { title, author, category, contentPreview, readTime, slug, categorySlug, postID };
+          const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug } =
+            item.fields;
+          return {
+            title,
+            author,
+            category,
+            contentPreview,
+            readTime,
+            slug,
+            categorySlug,
+            authorSlug,
+            postID,
+          };
         });
-      console.log(postsData);
       dispatch({ type: "postsCategory/loaded", payload: postsData });
     } catch (error) {
       dispatch({ type: "rejected", payload: "There was an error loading category post" });
+    }
+  }, []);
+
+  const fetchAuthorPost = useCallback(async (author) => {
+    dispatch({ type: "loading" });
+    try {
+      const response = await contentfulClient.getEntries({
+        content_type: contentfulContentModel,
+        "fields.authorSlug": author,
+      });
+
+      const postsData = response.items
+        .filter((item) => item.fields.authorSlug === author)
+        .map((item) => {
+          const postID = item.sys.id;
+          const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug } =
+            item.fields;
+          return {
+            title,
+            author,
+            category,
+            contentPreview,
+            readTime,
+            slug,
+            categorySlug,
+            authorSlug,
+            postID,
+          };
+        });
+      dispatch({ type: "postsAuthor/loaded", payload: postsData });
+    } catch (error) {
+      dispatch({ type: "rejected", payload: "There was an error loading author post" });
     }
   }, []);
 
@@ -131,9 +187,11 @@ function PostsProvider({ children }) {
         postsPopular,
         currentPost,
         postsCategory,
+        postsAuthor,
         fetchPopularPosts,
         fetchSinglePost,
         fetchCategoryPost,
+        fetchAuthorPost,
       }}
     >
       {children}
