@@ -58,7 +58,7 @@ export default function Post() {
                 alt={postRestDetails?.author}
               />
               <h4>
-                <Link to="">{postRestDetails?.author}</Link>
+                <Link to={`/autor/${postRestDetails?.authorSlug}`}>{postRestDetails?.author}</Link>
               </h4>
             </div>
           </div>
