@@ -1,3 +1,4 @@
+import "./category.scss";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { usePosts } from "../../contexts/PostsContext";
@@ -5,7 +6,7 @@ import Hero from "../../components/Hero/Hero";
 import MainWrapper from "../../components/MainWrapper/MainWrapper";
 import PostsList from "../../components/PostsList/PostsList";
 import PostPreview from "../../components/PostPreview/PostPreview";
-import "./category.scss";
+import Spinner from "../../components/Spinner/Spinner";
 
 export default function Category() {
   const { postsCategory, fetchCategoryPost, isLoading } = usePosts();
@@ -33,10 +34,14 @@ export default function Category() {
     <section className="category">
       <Hero type="hero__normal">
         <div className="hero__normal-titles">
-          <h2 onClick={() => scrollToTarget()}>
-            Poznaj posty z kategorii: <br />
-            {postsCategory[0]?.category}
-          </h2>
+          {isLoading ? (
+            <Spinner type="small-spinner" />
+          ) : (
+            <h2 onClick={() => scrollToTarget()}>
+              Poznaj posty z kategorii: <br />
+              {postsCategory[0]?.category}
+            </h2>
+          )}
         </div>
       </Hero>
 
