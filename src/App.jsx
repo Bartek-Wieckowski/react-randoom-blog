@@ -9,6 +9,7 @@ const Post = lazy(() => import("./pages/Post/Post"));
 const Category = lazy(() => import("./pages/Category/Category"));
 const Author = lazy(() => import("./pages/Author/Author"));
 const ReadTime = lazy(() => import("./pages/ReadTime/ReadTime"));
+const Register = lazy(() => import("./pages/Register/Register"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
 // components
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/kategoria/:slug" element={<Category />} />
             <Route path="/autor/:slug" element={<Author />} />
             <Route path="/czas-czytania/:value" element={<ReadTime />} />
+            <Route path="/rejestracja" element={<Register />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
