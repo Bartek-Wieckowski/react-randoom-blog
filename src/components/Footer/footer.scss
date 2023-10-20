@@ -1,12 +1,14 @@
-footer {
-  .content {
-    .container {
-      text-align: center;
-      padding-top: 75px;
-      color: var(--grey-color);
+.page-footer {
+  background-color: #f1f2f6;
+  .container {
+    position: relative;
+    top: -75px;
+    text-align: center;
+    color: var(--grey-color);
+    .logo{
+      color: var(--main-color)
     }
   }
-
   .copyright {
     font-size: 14px;
   }
