@@ -1,5 +1,9 @@
 import "./register.scss";
 
 export default function Register() {
-  return <div>Register</div>;
+  return (
+    <section className="register">
+      Register
+    </section>
+  );
 }
