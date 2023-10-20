@@ -38,7 +38,7 @@ export default function ReadTIme() {
             <Spinner type="small-spinner" />
           ) : (
             <h2 onClick={() => scrollToTarget()}>
-              Poznaj posty, które czytasz
+              Poznaj posty, które czytasz w
               <br /> {postsReadTime[0]?.readTime} min
             </h2>
           )}
