@@ -12,6 +12,7 @@ const initialState = {
   postsAuthor: [],
   postsReadTime: [],
   currentPost: {},
+  userSearchData: [],
   isLoading: false,
   error: "",
 };
@@ -34,6 +35,8 @@ function reducer(state, action) {
       return { ...state, isLoading: false, postsAuthor: action.payload };
     case "postsReadTime/loaded":
       return { ...state, isLoading: false, postsReadTime: action.payload };
+    case "userSearchData/loaded":
+      return { ...state, isLoading: false, userSearchData: action.payload };
     default:
       throw new Error("Unknown action type");
   }
@@ -41,7 +44,16 @@ function reducer(state, action) {
 
 function PostsProvider({ children }) {
   const [
-    { isLoading, postsPreview, postsPopular, currentPost, postsCategory, postsAuthor, postsReadTime },
+    {
+      isLoading,
+      postsPreview,
+      postsPopular,
+      currentPost,
+      postsCategory,
+      postsAuthor,
+      postsReadTime,
+      userSearchData,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -213,6 +225,38 @@ function PostsProvider({ children }) {
       dispatch({ type: "rejected", payload: "There was an error loading read time all posts" });
     }
   }, []);
+  const fetchUserSearchData = useCallback(async (query) => {
+    dispatch({ type: "loading" });
+    const fieldsToSearch = {
+      category: "fields.category[match]",
+      author: "fields.author[match]",
+      tags: "fields.tags[match]",
+      title: "fields.title[match]",
+    };
+    
+    const queries = [];
+    
+    for (const field in fieldsToSearch) {
+      queries.push(
+        contentfulClient.getEntries({
+          content_type: contentfulContentModel,
+          [fieldsToSearch[field]]: query,
+        })
+      );
+    }
+    
+    try {
+      const responses = await Promise.all(queries);
+    
+      const mergedResponse = responses
+        .map((response) => response.items)
+        .flat();
+    
+      console.log(mergedResponse);
+    } catch (error) {
+      dispatch({ type: "rejected", payload: "There was an error loading searched query" });
+    }
+  }, []);
 
   return (
     <PostsContext.Provider
@@ -229,6 +273,8 @@ function PostsProvider({ children }) {
         fetchCategoryPost,
         fetchAuthorPost,
         fetchReadTimePost,
+        userSearchData,
+        fetchUserSearchData,
       }}
     >
       {children}
