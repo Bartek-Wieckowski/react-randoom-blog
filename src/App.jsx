@@ -11,6 +11,7 @@ const Author = lazy(() => import("./pages/Author/Author"));
 const ReadTime = lazy(() => import("./pages/ReadTime/ReadTime"));
 const Login = lazy(() => import("./pages/Login/Login"));
 const Register = lazy(() => import("./pages/Register/Register"));
+const SearchFilterResults = lazy(() => import("./pages/SearchFilterResults/SearchFilterResults"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
 // components
@@ -47,6 +48,7 @@ export default function App() {
             <Route path="/czas-czytania/:value" element={<ReadTime />} />
             <Route path="/logowanie" element={<Login />} />
             <Route path="/rejestracja" element={<Register />} />
+            <Route path="/wyniki-wyszukiwania" element={<SearchFilterResults />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Suspense>
