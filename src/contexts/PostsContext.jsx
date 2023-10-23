@@ -5,14 +5,12 @@ import { contentfulContentModel } from "../utils/contentfulConfig";
 const PostsContext = createContext();
 
 const initialState = {
-  posts: [],
   postsPreview: [],
   postsPopular: [],
   postsCategory: [],
   postsAuthor: [],
   postsReadTime: [],
   currentPost: {},
-  userSearchData: [],
   isLoading: false,
   error: "",
 };
@@ -35,8 +33,6 @@ function reducer(state, action) {
       return { ...state, isLoading: false, postsAuthor: action.payload };
     case "postsReadTime/loaded":
       return { ...state, isLoading: false, postsReadTime: action.payload };
-    case "userSearchData/loaded":
-      return { ...state, isLoading: false, userSearchData: action.payload };
     default:
       throw new Error("Unknown action type");
   }
@@ -52,7 +48,6 @@ function PostsProvider({ children }) {
       postsCategory,
       postsAuthor,
       postsReadTime,
-      userSearchData,
     },
     dispatch,
   ] = useReducer(reducer, initialState);
@@ -227,59 +222,6 @@ function PostsProvider({ children }) {
     }
   }, []);
 
-  const fetchUserSearchData = useCallback(async (query) => {
-    dispatch({ type: "loading" });
-    const fieldsToSearch = {
-      category: "fields.category[match]",
-      author: "fields.author[match]",
-      tags: "fields.tags[match]",
-      title: "fields.title[match]",
-      readTime: "fields.readTime",
-    };
-
-    const isNumeric = !isNaN(query);
-    const queries = [];
-    const deduplicatedResults = new Set();
-
-    if (isNumeric) {
-      queries.push(
-        contentfulClient.getEntries({
-          content_type: contentfulContentModel,
-          [fieldsToSearch["readTime"]]: parseInt(query, 10),
-        })
-      );
-    } else {
-      for (const field in fieldsToSearch) {
-        if (field !== "readTime") {
-          queries.push(
-            contentfulClient.getEntries({
-              content_type: contentfulContentModel,
-              [fieldsToSearch[field]]: query,
-            })
-          );
-        }
-      }
-    }
-
-    try {
-      const responses = await Promise.all(queries);
-
-      responses.forEach((response) => {
-        response.items.forEach((item) => {
-          deduplicatedResults.add(item.sys.id);
-        });
-      });
-
-      const mergedResponse = Array.from(deduplicatedResults).map((id) =>
-        responses.flatMap((response) => response.items).find((item) => item.sys.id === id)
-      );
-
-      dispatch({ type: "userSearchData/loaded", payload: mergedResponse });
-    } catch (error) {
-      dispatch({ type: "rejected", payload: "There was an error loading the searched query" });
-    }
-  }, []);
-
   return (
     <PostsContext.Provider
       value={{
@@ -295,8 +237,6 @@ function PostsProvider({ children }) {
         fetchCategoryPost,
         fetchAuthorPost,
         fetchReadTimePost,
-        userSearchData,
-        fetchUserSearchData,
       }}
     >
       {children}
