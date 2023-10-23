@@ -21,6 +21,7 @@ import Spinner from "./components/Spinner/Spinner";
 
 // contexts
 import { PostsProvider } from "./contexts/PostsContext";
+import { SearchFilterProvider } from "./contexts/SearchFilterContext";
 
 export default function App() {
   const [isOpenMobileMenu, setIsOpenMobileMenu] = useState(false);
@@ -37,22 +38,24 @@ export default function App() {
   return (
     <div id="page" className={`page ${isOpenMobileMenu ? "showmenu" : ""}`}>
       <PostsProvider>
-        <Navigation onOpenMobileMenu={onOpenMobileMenu} />
-        <Suspense fallback={<Spinner type="full-page-spinner" />}>
-          <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/popularne" element={<Popular />} />
-            <Route path="/post/:slug" element={<Post />} />
-            <Route path="/kategoria/:slug" element={<Category />} />
-            <Route path="/autor/:slug" element={<Author />} />
-            <Route path="/czas-czytania/:value" element={<ReadTime />} />
-            <Route path="/logowanie" element={<Login />} />
-            <Route path="/rejestracja" element={<Register />} />
-            <Route path="/wyniki-wyszukiwania" element={<SearchFilterResults />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Suspense>
-        <Footer />
+        <SearchFilterProvider>
+          <Navigation onOpenMobileMenu={onOpenMobileMenu} />
+          <Suspense fallback={<Spinner type="full-page-spinner" />}>
+            <Routes>
+              <Route path="/" exact element={<Home />} />
+              <Route path="/popularne" element={<Popular />} />
+              <Route path="/post/:slug" element={<Post />} />
+              <Route path="/kategoria/:slug" element={<Category />} />
+              <Route path="/autor/:slug" element={<Author />} />
+              <Route path="/czas-czytania/:value" element={<ReadTime />} />
+              <Route path="/logowanie" element={<Login />} />
+              <Route path="/rejestracja" element={<Register />} />
+              <Route path="/wyniki-wyszukiwania" element={<SearchFilterResults />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </Suspense>
+          <Footer />
+        </SearchFilterProvider>
       </PostsProvider>
     </div>
   );
