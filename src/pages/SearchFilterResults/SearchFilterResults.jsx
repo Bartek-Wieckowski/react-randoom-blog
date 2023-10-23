@@ -1,16 +1,18 @@
 import "./search-filter-results.scss";
 import { useEffect, useRef } from "react";
-import { usePosts } from "../../contexts/PostsContext";
 import { useLocation } from "react-router-dom";
+import { useSearchFilter } from "../../contexts/SearchFilterContext";
 import Hero from "../../components/Hero/Hero";
 import MainWrapper from "../../components/MainWrapper/MainWrapper";
-import PostsList from "../../components/PostsList/PostsList";
 import Spinner from "../../components/Spinner/Spinner";
+import Filters from "../../components/Filters/Filters";
+import SearchResults from "../../components/SearchResults/SearchResults";
 
 export default function SearchFilterResults() {
-  const { userSearchData, fetchUserSearchData, isLoading } = usePosts();
+  const { userSearchData, fetchUserSearchData, isLoading } = useSearchFilter();
   const postsElement = useRef(null);
   const location = useLocation();
+  const allFoundedPosts = userSearchData.length;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,22 +34,27 @@ export default function SearchFilterResults() {
   };
 
   return (
-    <section className="test">
+    <section className="search-filter-results">
       <Hero type="hero__normal">
         <div className="hero__normal-titles">
-          {isLoading ? <Spinner type="small-spinner" /> : <h2 onClick={() => scrollToTarget()}>test</h2>}
+          {isLoading ? (
+            <Spinner type="small-spinner" />
+          ) : (
+            <h2 onClick={() => scrollToTarget()}>
+              Wyszukane wyniki dla: <br /> {location.search.replace("?q=", "").replaceAll("%20", " ")}
+            </h2>
+          )}
         </div>
       </Hero>
 
       <MainWrapper>
         <h3 className="read-time__title" ref={postsElement}>
-          Wszystkie posty
+          Znaleziony posty: {allFoundedPosts}
         </h3>
-        <PostsList>
-          {userSearchData.map((result) => (
-            <p key={result.id}>{result.id}</p>
-          ))}
-        </PostsList>
+        <div className="search-filter-results-wrapper">
+          <Filters />
+          <SearchResults results={userSearchData} />
+        </div>
       </MainWrapper>
     </section>
   );
