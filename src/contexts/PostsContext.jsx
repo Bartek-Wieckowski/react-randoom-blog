@@ -194,6 +194,7 @@ function PostsProvider({ children }) {
       dispatch({ type: "rejected", payload: "There was an error loading author post" });
     }
   }, []);
+
   const fetchReadTimePost = useCallback(async (readTimeVal) => {
     dispatch({ type: "loading" });
     try {
@@ -225,6 +226,7 @@ function PostsProvider({ children }) {
       dispatch({ type: "rejected", payload: "There was an error loading read time all posts" });
     }
   }, []);
+
   const fetchUserSearchData = useCallback(async (query) => {
     dispatch({ type: "loading" });
     const fieldsToSearch = {
@@ -232,29 +234,49 @@ function PostsProvider({ children }) {
       author: "fields.author[match]",
       tags: "fields.tags[match]",
       title: "fields.title[match]",
+      readTime: "fields.readTime",
     };
-    
+
+    const isNumeric = !isNaN(query);
     const queries = [];
-    
-    for (const field in fieldsToSearch) {
+    const deduplicatedResults = new Set();
+
+    if (isNumeric) {
       queries.push(
         contentfulClient.getEntries({
           content_type: contentfulContentModel,
-          [fieldsToSearch[field]]: query,
+          [fieldsToSearch["readTime"]]: parseInt(query, 10),
         })
       );
+    } else {
+      for (const field in fieldsToSearch) {
+        if (field !== "readTime") {
+          queries.push(
+            contentfulClient.getEntries({
+              content_type: contentfulContentModel,
+              [fieldsToSearch[field]]: query,
+            })
+          );
+        }
+      }
     }
-    
+
     try {
       const responses = await Promise.all(queries);
-    
-      const mergedResponse = responses
-        .map((response) => response.items)
-        .flat();
-    
-      console.log(mergedResponse);
+
+      responses.forEach((response) => {
+        response.items.forEach((item) => {
+          deduplicatedResults.add(item.sys.id);
+        });
+      });
+
+      const mergedResponse = Array.from(deduplicatedResults).map((id) =>
+        responses.flatMap((response) => response.items).find((item) => item.sys.id === id)
+      );
+
+      dispatch({ type: "userSearchData/loaded", payload: mergedResponse });
     } catch (error) {
-      dispatch({ type: "rejected", payload: "There was an error loading searched query" });
+      dispatch({ type: "rejected", payload: "There was an error loading the searched query" });
     }
   }, []);
 
