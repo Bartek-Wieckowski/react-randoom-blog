@@ -16,4 +16,10 @@ function formatTime(date) {
   return date.toLocaleString("pl-PL", options);
 }
 
-export { formatDate, formatTime };
+function getUniqueValues(data, type) {
+  let unique = data.map((item) => item[type]);
+
+  return ["all", ...new Set(unique)];
+}
+
+export { formatDate, formatTime, getUniqueValues };
