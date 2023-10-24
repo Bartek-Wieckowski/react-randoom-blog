@@ -9,10 +9,12 @@ import Filters from "../../components/Filters/Filters";
 import SearchResults from "../../components/SearchResults/SearchResults";
 
 export default function SearchFilterResults() {
-  const { userSearchData, fetchUserSearchData, isLoading } = useSearchFilter();
+  const { userSearchData, fetchUserSearchData, isLoading, filteredPosts } = useSearchFilter();
   const postsElement = useRef(null);
   const location = useLocation();
-  const allFoundedPosts = userSearchData.length;
+  const allFoundedPosts = filteredPosts.length > 0 ? filteredPosts.length : userSearchData.length;
+
+  const updatedResults = filteredPosts.length > 0 ? filteredPosts : userSearchData;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,7 +55,7 @@ export default function SearchFilterResults() {
         </h3>
         <div className="search-filter-results-wrapper">
           <Filters />
-          <SearchResults results={userSearchData} />
+          <SearchResults results={updatedResults} />
         </div>
       </MainWrapper>
     </section>
