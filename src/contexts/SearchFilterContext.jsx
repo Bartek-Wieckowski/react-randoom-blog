@@ -8,6 +8,10 @@ const initialState = {
   posts: [],
   filteredPosts: [],
   userSearchData: [],
+  filters: {
+    author: "all",
+    category: "all",
+  },
   gridView: true,
   isLoading: false,
   error: "",
@@ -23,8 +27,33 @@ function reducer(state, action) {
       return { ...state, gridView: true };
     case "setListView":
       return { ...state, gridView: false };
-    case "posts/loaded":
-      return { ...state, isLoading: false, posts: action.payload };
+    case "posts/loaded": {
+      return {
+        ...state,
+        posts: [...action.payload],
+        filters: { ...state.filters },
+      };
+    }
+    case "filters/updated": {
+      const { name, value } = action.payload;
+      return { ...state, filters: { ...state.filters, [name]: value } };
+    }
+    case "posts/filtered": {
+      const { posts } = state;
+      const { author, category } = state.filters;
+      let tempPostsFilter = [...posts];
+      if (author !== "all") {
+        tempPostsFilter = tempPostsFilter.filter((post) => post.author === author);
+        return { ...state, filteredPosts: tempPostsFilter };
+      }
+      if (category !== "all") {
+        tempPostsFilter = tempPostsFilter.filter((post) => post.category === category);
+        return { ...state, filteredPosts: tempPostsFilter };
+      }
+      
+      return { ...state };
+    }
+
     case "userSearchData/loaded":
       return { ...state, isLoading: false, userSearchData: action.payload };
     default:
@@ -33,15 +62,26 @@ function reducer(state, action) {
 }
 
 function SearchFilterProvider({ children }) {
-  const [{ isLoading, gridView, filteredPosts, userSearchData }, dispatch] = useReducer(reducer, initialState);
+  const [{ isLoading, gridView, userSearchData, posts, filteredPosts, filters }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
-  function setGridView() {
+  const setGridView = () => {
     dispatch({ type: "setGridView" });
-  }
-
-  function setListView() {
+  };
+  const setListView = () => {
     dispatch({ type: "setListView" });
-  }
+  };
+
+  const updateFilters = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    if (name === "category") {
+      value = e.target.textContent;
+    }
+    dispatch({ type: "filters/updated", payload: { name, value } });
+  };
 
   useEffect(() => {
     async function fetchPosts() {
@@ -52,7 +92,7 @@ function SearchFilterProvider({ children }) {
         });
         const postsData = response.items.map((item) => {
           const postID = item.sys.id;
-          const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug } =
+          const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug, mainImg } =
             item.fields;
           return {
             title,
@@ -64,6 +104,7 @@ function SearchFilterProvider({ children }) {
             categorySlug,
             authorSlug,
             postID,
+            mainImg,
           };
         });
         dispatch({ type: "posts/loaded", payload: postsData });
@@ -73,6 +114,13 @@ function SearchFilterProvider({ children }) {
     }
     fetchPosts();
   }, []);
+
+  useEffect(
+    function () {
+      dispatch({ type: "posts/filtered" });
+    },
+    [filters]
+  );
 
   const fetchUserSearchData = useCallback(async (query) => {
     dispatch({ type: "loading" });
@@ -120,8 +168,26 @@ function SearchFilterProvider({ children }) {
       const mergedResponse = Array.from(deduplicatedResults).map((id) =>
         responses.flatMap((response) => response.items).find((item) => item.sys.id === id)
       );
+      const transformedData = mergedResponse.map(item => {
+        const postID = item.sys.id;
+        const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug, mainImg } = item.fields;
+      
+        // Zwracamy przekształcone dane
+        return {
+          title,
+          author,
+          category,
+          contentPreview,
+          readTime,
+          slug,
+          categorySlug,
+          authorSlug,
+          postID,
+          mainImg,
+        };
+      });
 
-      dispatch({ type: "userSearchData/loaded", payload: mergedResponse });
+      dispatch({ type: "userSearchData/loaded", payload: transformedData });
     } catch (error) {
       dispatch({ type: "rejected", payload: "There was an error loading the searched query" });
     }
@@ -131,12 +197,15 @@ function SearchFilterProvider({ children }) {
     <SearchFilterContext.Provider
       value={{
         isLoading,
+        fetchUserSearchData,
+        userSearchData,
         gridView,
         setGridView,
         setListView,
+        updateFilters,
+        filters,
+        posts,
         filteredPosts,
-        fetchUserSearchData,
-        userSearchData,
       }}
     >
       {children}
@@ -150,4 +219,5 @@ function useSearchFilter() {
   return context;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { SearchFilterProvider, useSearchFilter };
