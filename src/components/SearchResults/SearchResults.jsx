@@ -31,11 +31,11 @@ function GridView({ posts }) {
   return (
     <>
       <div className="grid-posts-container">
-        {posts?.map((result) => (
-          <article key={result.sys.id}>
+        {posts?.map((post) => (
+          <article key={post?.postID}>
             <div className="grid-post-item">
-              <img src={result.fields.mainImg.fields.file.url} alt={result.fields.title} />
-              <Link to={`/post/${result.fields.slug}`} className="link">
+              <img src={post?.mainImg?.fields?.file?.url} alt={post?.title} />
+              <Link to={`/post/${post?.slug}`} className="link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32"
@@ -48,8 +48,8 @@ function GridView({ posts }) {
               </Link>
             </div>
             <footer className="grid-post-item-footer">
-              <h5>{result.fields.title}</h5>
-              <p>{result.fields.author}</p>
+              <h5>{post?.title}</h5>
+              <p>{post?.author}</p>
             </footer>
           </article>
         ))}
@@ -60,14 +60,14 @@ function GridView({ posts }) {
 
 function ListView({ posts }) {
   return (
-    <div className="list-posts-container">
-      {posts.map((result) => {
-        return (
-          <article className="list-post-item" key={result.sys.id}>
+    <>
+      <div className="list-posts-container">
+        {posts?.map((post) => (
+          <article className="list-post-item" key={post?.postID}>
             <div className="list-post-item-img-tags">
-              <img src={result.fields.mainImg.fields.file.url} alt={result.fields.title} />
+              <img src={post?.mainImg?.fields?.file?.url} alt={post?.title} />
               <div className="tags">
-                {result.fields?.tags.map((tag) => (
+                {post?.tags?.map((tag) => (
                   <Link className="btn-tag" key={tag}>
                     {tag}
                   </Link>
@@ -76,16 +76,16 @@ function ListView({ posts }) {
             </div>
 
             <div className="list-post-item-details">
-              <h4>{result.fields.title}</h4>
-              <h5>{result.fields.category}</h5>
-              <p>{documentToReactComponents(result.fields?.contentPreview)}</p>
-              <Link to={`/post/${result.fields.slug}`} className="btn">
+              <h4>{post?.title}</h4>
+              <h5>{post?.category}</h5>
+              <div>{documentToReactComponents(post?.contentPreview)}</div>
+              <Link to={`/post/${post?.slug}`} className="btn">
                 Czytaj więcej
               </Link>
             </div>
           </article>
-        );
-      })}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }
