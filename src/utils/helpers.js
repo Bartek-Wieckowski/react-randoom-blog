@@ -18,8 +18,14 @@ function formatTime(date) {
 
 function getUniqueValues(data, type) {
   let unique = data.map((item) => item[type]);
-
-  return ["all", ...new Set(unique)];
+  
+  if (type === 'category') {
+    return ["Wszystkie", ...new Set(unique)];
+  } else if (type === 'author') {
+    return ["Wszyscy", ...new Set(unique)];
+  } else {
+    return ["all", ...new Set(unique)];
+  }
 }
 
 export { formatDate, formatTime, getUniqueValues };

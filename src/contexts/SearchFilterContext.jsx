@@ -9,8 +9,8 @@ const initialState = {
   filteredPosts: [],
   userSearchData: [],
   filters: {
-    author: "all",
-    category: "all",
+    author: "Wszyscy",
+    category: "Wszystkie",
   },
   gridView: true,
   isLoading: false,
@@ -42,11 +42,11 @@ function reducer(state, action) {
       const { posts } = state;
       const { author, category } = state.filters;
       let tempPostsFilter = [...posts];
-      if (author !== "all") {
+      if (author !== "Wszyscy") {
         tempPostsFilter = tempPostsFilter.filter((post) => post.author === author);
         return { ...state, filteredPosts: tempPostsFilter };
       }
-      if (category !== "all") {
+      if (category !== "Wszystkie") {
         tempPostsFilter = tempPostsFilter.filter((post) => post.category === category);
         return { ...state, filteredPosts: tempPostsFilter };
       }
