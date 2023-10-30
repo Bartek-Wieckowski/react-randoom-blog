@@ -39,12 +39,13 @@ export default function SearchFilterResults() {
     <section className="search-filter-results">
       <Hero type="hero__normal">
         <div className="hero__normal-titles">
-          {isLoading ? (
-            <Spinner type="small-spinner" />
-          ) : (
+          {isLoading && <Spinner type="small-spinner" />}
+          {!isLoading && location.search ? (
             <h2 onClick={() => scrollToTarget()}>
               Wyszukane wyniki dla: <br /> {location.search.replace("?q=", "").replaceAll("%20", " ")}
             </h2>
+          ) : (
+            <h2 onClick={() => scrollToTarget()}>Filtruj posty</h2>
           )}
         </div>
       </Hero>
