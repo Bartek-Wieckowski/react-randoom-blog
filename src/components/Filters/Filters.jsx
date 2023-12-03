@@ -1,23 +1,26 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSearchFilter } from "../../contexts/SearchFilterContext";
 import { getUniqueValues } from "../../utils/helpers";
 import "./filters.scss";
 
 export default function Filters() {
-  const navigate = useNavigate();
   const {
     filters: { author, category },
     updateFilters,
     posts,
   } = useSearchFilter();
+  const [queryParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const categories = getUniqueValues(posts, "category");
   const authors = getUniqueValues(posts, "author");
 
   const updateFiltersWithUrlUpdate = (e) => {
-    const urlWithoutQParam = new URLSearchParams(window.location.search);
-    urlWithoutQParam.delete("q");
-    navigate({ search: urlWithoutQParam.toString() });
+    const getQParams = queryParams.get("q");
+    if (getQParams) {
+      queryParams.delete("q");
+      navigate("/wyniki-wyszukiwania");
+    }
 
     updateFilters(e);
   };

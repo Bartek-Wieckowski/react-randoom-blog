@@ -1,6 +1,6 @@
 import "./search-filter-results.scss";
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useSearchFilter } from "../../contexts/SearchFilterContext";
 import Hero from "../../components/Hero/Hero";
 import MainWrapper from "../../components/MainWrapper/MainWrapper";
@@ -10,20 +10,20 @@ import SearchResults from "../../components/SearchResults/SearchResults";
 
 export default function SearchFilterResults() {
   const { userSearchData, fetchUserSearchData, isLoading, filteredPosts } = useSearchFilter();
+  const [queryParams] = useSearchParams();
   const postsElement = useRef(null);
   const location = useLocation();
-  const allFoundedPosts = filteredPosts.length > 0 ? filteredPosts.length : userSearchData.length;
 
+  const allFoundedPosts = filteredPosts.length > 0 ? filteredPosts.length : userSearchData.length;
   const updatedResults = filteredPosts.length > 0 ? filteredPosts : userSearchData;
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const q = queryParams.get("q");
-    if(q){
+    const getQParams = queryParams.get("q");
+    if (getQParams) {
       window.scrollTo(0, 0);
     }
-    fetchUserSearchData(q);
-  }, [fetchUserSearchData, location.search]);
+    fetchUserSearchData(getQParams);
+  }, [fetchUserSearchData, queryParams]);
 
   const scrollToTarget = () => {
     if (postsElement.current) {
