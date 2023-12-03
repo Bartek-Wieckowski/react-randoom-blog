@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSearchFilter } from "../../contexts/SearchFilterContext";
 import { getUniqueValues } from "../../utils/helpers";
 import "./filters.scss";
-import { useState } from "react";
 
 export default function Filters() {
   const [activeCategory, setActiveCategory] = useState(null);
@@ -10,6 +10,7 @@ export default function Filters() {
     filters: { author },
     updateFilters,
     posts,
+    clearFilters,
   } = useSearchFilter();
   const [queryParams] = useSearchParams();
   const navigate = useNavigate();
@@ -27,9 +28,13 @@ export default function Filters() {
     updateFilters(e);
   };
 
+  const resetAllFilters = () => {
+    clearFilters();
+    setActiveCategory(null);
+  };
+
   return (
     <aside className="filters-wrapper">
-      <div className="content">
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="form-control">
             <h5>Kategorie</h5>
@@ -61,8 +66,10 @@ export default function Filters() {
               })}
             </select>
           </div>
+          <div className="form-control">
+            <button type="button" className="clear-btn" onClick={resetAllFilters}>Wyczyść</button>
+          </div>
         </form>
-      </div>
     </aside>
   );
 }

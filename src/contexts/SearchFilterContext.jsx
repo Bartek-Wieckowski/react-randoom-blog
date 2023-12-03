@@ -93,6 +93,15 @@ function reducer(state, action) {
         },
         userActionInFilters: false,
       };
+
+    case "filters/cleared":
+      return {
+        ...state,
+        filters: {
+          author: "Wszyscy",
+          category: "Wszystkie",
+        },
+      };
     default:
       throw new Error("Unknown action type");
   }
@@ -239,6 +248,10 @@ function SearchFilterProvider({ children }) {
     }
   }, []);
 
+  const clearFilters = () => {
+    dispatch({ type: "filters/cleared" });
+  };
+
   return (
     <SearchFilterContext.Provider
       value={{
@@ -253,6 +266,7 @@ function SearchFilterProvider({ children }) {
         posts,
         filteredPosts,
         userActionInFilters,
+        clearFilters
       }}
     >
       {children}

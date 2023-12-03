@@ -1,8 +1,14 @@
 .filters-wrapper {
   flex: 1;
+  width: 100%;
 
-  .content {
-    background-color: transparent;
+  form {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (min-width: 600px) {
+      display: block;
+    }
   }
 
   .form-control {
@@ -34,9 +40,12 @@
   }
 
   .clear-btn {
-    background: tomato;
-    color: var(--clr-white);
+    background: var(--secondary-color);
+    color: var(--light-color);
     padding: 0.25rem 0.5rem;
-    border-radius: var(--radius);
+    border-radius: 0.8rem;
+    &:hover {
+      color: var(--light-color);
+    }
   }
 }
