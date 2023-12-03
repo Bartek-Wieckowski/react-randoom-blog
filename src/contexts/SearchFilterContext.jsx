@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import contentfulClient from "../utils/contentfulConfig";
+import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import { contentfulContentModel } from "../utils/contentfulConfig";
 
 const SearchFilterContext = createContext();
@@ -12,6 +12,7 @@ const initialState = {
     author: "Wszyscy",
     category: "Wszystkie",
   },
+  userActionInFilters: false,
   gridView: true,
   isLoading: false,
   error: "",
@@ -36,36 +37,72 @@ function reducer(state, action) {
     }
     case "filters/updated": {
       const { name, value } = action.payload;
-      return { ...state, filters: { ...state.filters, [name]: value } };
+      return {
+        ...state,
+        filters: { ...state.filters, [name]: value },
+        userActionInFilters: true,
+        userSearchData: [],
+      };
     }
     case "posts/filtered": {
-      const { posts } = state;
-      const { author, category } = state.filters;
-      let tempPostsFilter = [...posts];
-      if (author !== "Wszyscy") {
-        tempPostsFilter = tempPostsFilter.filter((post) => post.author === author);
+      const { posts, filters, userSearchData, userActionInFilters } = state;
+      const { author, category } = filters;
+
+      if (userActionInFilters) {
+        let tempPostsFilter = [...posts];
+
+        if (author === "Wszyscy" && category === "Wszystkie") {
+          return {
+            ...state,
+            filteredPosts: userSearchData.length > 0 ? userSearchData : tempPostsFilter,
+          };
+        }
+
+        if (author === "Wszyscy" && category !== "Wszystkie") {
+          tempPostsFilter = tempPostsFilter.filter((post) => post.category === category);
+        } else {
+          if (author !== "Wszyscy") {
+            tempPostsFilter = tempPostsFilter.filter((post) => post.author === author);
+          }
+
+          if (category !== "Wszystkie") {
+            tempPostsFilter = tempPostsFilter.filter((post) => post.category === category);
+          }
+        }
+
+        const postsExist = tempPostsFilter.length > 0;
+
+        if (!postsExist) {
+          return { ...state, filteredPosts: [] };
+        }
+
         return { ...state, filteredPosts: tempPostsFilter };
       }
-      if (category !== "Wszystkie") {
-        tempPostsFilter = tempPostsFilter.filter((post) => post.category === category);
-        return { ...state, filteredPosts: tempPostsFilter };
-      }
-      
       return { ...state };
     }
 
     case "userSearchData/loaded":
-      return { ...state, isLoading: false, userSearchData: action.payload };
+      return {
+        ...state,
+        isLoading: false,
+        userSearchData: action.payload,
+        filteredPosts: [],
+        filters: {
+          author: "Wszyscy",
+          category: "Wszystkie",
+        },
+        userActionInFilters: false,
+      };
     default:
       throw new Error("Unknown action type");
   }
 }
 
 function SearchFilterProvider({ children }) {
-  const [{ isLoading, gridView, userSearchData, posts, filteredPosts, filters }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [
+    { isLoading, gridView, userSearchData, posts, filteredPosts, filters, userActionInFilters },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const setGridView = () => {
     dispatch({ type: "setGridView" });
@@ -92,8 +129,17 @@ function SearchFilterProvider({ children }) {
         });
         const postsData = response.items.map((item) => {
           const postID = item.sys.id;
-          const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug, mainImg } =
-            item.fields;
+          const {
+            title,
+            author,
+            category,
+            contentPreview,
+            readTime,
+            slug,
+            categorySlug,
+            authorSlug,
+            mainImg,
+          } = item.fields;
           return {
             title,
             author,
@@ -168,11 +214,11 @@ function SearchFilterProvider({ children }) {
       const mergedResponse = Array.from(deduplicatedResults).map((id) =>
         responses.flatMap((response) => response.items).find((item) => item.sys.id === id)
       );
-      const transformedData = mergedResponse.map(item => {
+      const transformedData = mergedResponse.map((item) => {
         const postID = item.sys.id;
-        const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug, mainImg } = item.fields;
-      
-        // Zwracamy przekształcone dane
+        const { title, author, category, contentPreview, readTime, slug, categorySlug, authorSlug, mainImg } =
+          item.fields;
+
         return {
           title,
           author,
@@ -206,6 +252,7 @@ function SearchFilterProvider({ children }) {
         filters,
         posts,
         filteredPosts,
+        userActionInFilters,
       }}
     >
       {children}
