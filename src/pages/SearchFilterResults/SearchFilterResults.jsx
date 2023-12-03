@@ -17,9 +17,11 @@ export default function SearchFilterResults() {
   const updatedResults = filteredPosts.length > 0 ? filteredPosts : userSearchData;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     const queryParams = new URLSearchParams(location.search);
     const q = queryParams.get("q");
+    if(q){
+      window.scrollTo(0, 0);
+    }
     fetchUserSearchData(q);
   }, [fetchUserSearchData, location.search]);
 
