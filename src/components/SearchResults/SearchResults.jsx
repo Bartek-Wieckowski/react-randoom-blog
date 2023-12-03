@@ -6,7 +6,7 @@ import "./search-results.scss";
 export default function SearchResults({ results }) {
   const { gridView, setListView, setGridView } = useSearchFilter();
 
-  if (results.length < 1) return <h5 style={{ textTransform: "none" }}>Nie znaleziono</h5>;
+  if (results.length < 1) return <h5 style={{ textTransform: "none", flex: 1 }}>Nie znaleziono</h5>;
 
   return (
     <div className="search-result-wrapper">

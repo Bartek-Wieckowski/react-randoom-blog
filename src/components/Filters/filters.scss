@@ -1,3 +1,42 @@
 .filters-wrapper {
   flex: 1;
+
+  .content {
+    background-color: transparent;
+  }
+
+  .form-control {
+    margin-bottom: 1.25rem;
+  }
+
+  h5 {
+    margin-bottom: 0.5rem;
+  }
+
+  button {
+    display: block;
+    margin: 0.25em 0;
+    padding: 0.25rem 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid transparent;
+    color: var(--dark-color);
+    cursor: pointer;
+    transition: color 0.3s ease;
+    &:hover {
+      color: var(--secondary-color);
+    }
+
+    &.active {
+      text-decoration: underline;
+      animation: pulsateActiveLink 2s infinite;
+    }
+  }
+
+  .clear-btn {
+    background: tomato;
+    color: var(--clr-white);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius);
+  }
 }

@@ -2,10 +2,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSearchFilter } from "../../contexts/SearchFilterContext";
 import { getUniqueValues } from "../../utils/helpers";
 import "./filters.scss";
+import { useState } from "react";
 
 export default function Filters() {
+  const [activeCategory, setActiveCategory] = useState(null);
   const {
-    filters: { author, category },
+    filters: { author },
     updateFilters,
     posts,
   } = useSearchFilter();
@@ -21,7 +23,7 @@ export default function Filters() {
       queryParams.delete("q");
       navigate("/wyniki-wyszukiwania");
     }
-
+    setActiveCategory(e.target.textContent.toLowerCase());
     updateFilters(e);
   };
 
@@ -39,7 +41,7 @@ export default function Filters() {
                     name="category"
                     key={index}
                     onClick={updateFiltersWithUrlUpdate}
-                    className={`${category === c.toLowerCase() ? "active" : null}`}
+                    className={activeCategory === c.toLowerCase() ? "active" : ""}
                   >
                     {c}
                   </button>
