@@ -1,5 +1,5 @@
 import "./search-filter-results.scss";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useSearchFilter } from "../../contexts/SearchFilterContext";
 import Hero from "../../components/Hero/Hero";
@@ -9,6 +9,7 @@ import Filters from "../../components/Filters/Filters";
 import SearchResults from "../../components/SearchResults/SearchResults";
 
 export default function SearchFilterResults() {
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const { userSearchData, fetchUserSearchData, isLoading, filteredPosts } = useSearchFilter();
   const [queryParams] = useSearchParams();
   const postsElement = useRef(null);
@@ -37,6 +38,10 @@ export default function SearchFilterResults() {
     }
   };
 
+  const handleMobileFiltersClick = () => {
+    setMobileFiltersOpen((prev) => !prev);
+  };
+
   return (
     <section className="search-filter-results">
       <Hero type="hero__normal">
@@ -57,8 +62,8 @@ export default function SearchFilterResults() {
           Znaleziony posty: {allFoundedPosts}
         </h3>
         <div className="search-filter-results-wrapper">
-          <Filters />
-          <SearchResults results={updatedResults} />
+          <Filters mobileFiltersOpen={mobileFiltersOpen} onShowMobileFilters={handleMobileFiltersClick} />
+          <SearchResults results={updatedResults} onShowMobileFilters={handleMobileFiltersClick} />
         </div>
       </MainWrapper>
     </section>

@@ -1,5 +1,6 @@
 .search-filter-results {
   &-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -8,6 +9,25 @@
 
     @media screen and (min-width: 600px) {
       flex-direction: row;
+    }
+
+    .show-filters-in-mobile {
+      background: transparent;
+      border: none;
+      width: 1.5rem;
+      height: 1.5rem;
+      font-size: 2.5rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &.active {
+        background: var(--grey-color);
+      }
+      @media (min-width: 600px) {
+        display: none;
+      }
     }
   }
 }
