@@ -1,6 +1,7 @@
 import "./search.scss";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 // TODO: do zrobienia autofocus w input search
 
@@ -11,9 +12,8 @@ export default function Search() {
 
   const handleSearch = () => {
     if (query.trim() === "") {
-      return; // TODO: dodac alert o pustym inpucie
+      return;
     }
-
     navigate(`/wyniki-wyszukiwania?q=${query}`);
     setQuery("");
     toggleSearchClass();
@@ -25,6 +25,7 @@ export default function Search() {
         handleSearch();
       } else {
         e.preventDefault();
+        toast.error("Puste pole, proszę wpisac tekst");
       }
     }
   };
