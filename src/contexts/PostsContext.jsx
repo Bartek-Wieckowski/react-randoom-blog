@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
-import contentfulClient from "../utils/contentfulConfig";
 import { contentfulContentModel } from "../utils/contentfulConfig";
+import contentfulClient from "../utils/contentfulConfig";
+import supabase from "../utils/supabaseConfig";
 
 const PostsContext = createContext();
 
@@ -40,15 +41,7 @@ function reducer(state, action) {
 
 function PostsProvider({ children }) {
   const [
-    {
-      isLoading,
-      postsPreview,
-      postsPopular,
-      currentPost,
-      postsCategory,
-      postsAuthor,
-      postsReadTime,
-    },
+    { isLoading, postsPreview, postsPopular, currentPost, postsCategory, postsAuthor, postsReadTime },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -75,11 +68,36 @@ function PostsProvider({ children }) {
             postID,
           };
         });
+
         dispatch({ type: "postsPreview/loaded", payload: postsData });
+
+        const contentfulPostIDs = response.items.map((item) => item.sys.id);
+
+        await addPostIDsToSupabase(contentfulPostIDs);
       } catch {
         dispatch({ type: "rejected", payload: "There was an error loading posts" });
       }
     }
+
+    async function addPostIDsToSupabase(contentfulPostIDs) {
+      try {
+        for (const contentfulPostID of contentfulPostIDs) {
+          // Sprawdź, czy rekord już istnieje w bazie danych
+          const existingRecord = await supabase
+            .from("randoomBlogPosts")
+            .select("postIDContentful")
+            .eq("postIDContentful", contentfulPostID);
+
+          if (existingRecord.data.length === 0) {
+            // Jeżeli rekord nie istnieje, dodaj go do bazy danych
+            await supabase.from("randoomBlogPosts").upsert([{ postIDContentful: contentfulPostID }]);
+          }
+        }
+      } catch (error) {
+        console.error("Błąd podczas dodawania identyfikatorów postów do Supabase:", error.message);
+      }
+    }
+
     fetchPosts();
   }, []);
 
