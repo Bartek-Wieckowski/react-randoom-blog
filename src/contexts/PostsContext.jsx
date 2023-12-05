@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import { contentfulContentModel } from "../utils/contentfulConfig";
 import contentfulClient from "../utils/contentfulConfig";
-import supabase from "../utils/supabaseConfig";
+import { addPostIDsToSupabase } from "../services/apiPosts";
 
 const PostsContext = createContext();
 
@@ -76,25 +76,6 @@ function PostsProvider({ children }) {
         await addPostIDsToSupabase(contentfulPostIDs);
       } catch {
         dispatch({ type: "rejected", payload: "There was an error loading posts" });
-      }
-    }
-
-    async function addPostIDsToSupabase(contentfulPostIDs) {
-      try {
-        for (const contentfulPostID of contentfulPostIDs) {
-          // Sprawdź, czy rekord już istnieje w bazie danych
-          const existingRecord = await supabase
-            .from("randoomBlogPosts")
-            .select("postIDContentful")
-            .eq("postIDContentful", contentfulPostID);
-
-          if (existingRecord.data.length === 0) {
-            // Jeżeli rekord nie istnieje, dodaj go do bazy danych
-            await supabase.from("randoomBlogPosts").upsert([{ postIDContentful: contentfulPostID }]);
-          }
-        }
-      } catch (error) {
-        console.error("Błąd podczas dodawania identyfikatorów postów do Supabase:", error.message);
       }
     }
 
