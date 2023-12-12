@@ -4,62 +4,57 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getMostVisitedPost } from "../../services/apiPosts";
+import { usePosts } from "../../contexts/PostsContext";
 
 export default function Slider() {
+  const [mostVisitedPosts, setMostVisitedPosts] = useState([]);
+  const { postsPreview } = usePosts();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getMostVisitedPost();
+        setMostVisitedPosts(data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const sliderThreePost = postsPreview.filter((item) =>
+    mostVisitedPosts.some((searchID) => searchID.postIDContentful === item.postID)
+  );
+
   return (
     <div className="slider__swiper-wrapper">
       <Swiper spaceBetween={50} slidesPerView={1} modules={[Pagination]} pagination={{ clickable: true }}>
-        <SwiperSlide>
-          <div className="slide-content">
-            <h2 className="slide-content__title">
-              <Link to="/">This wildlife photographer doesn`t just shoot landscapes</Link>
-            </h2>
-            <div className="slide-content__meta">
-              <span className="author">
-                <a href="">By Sarah</a>
-              </span>
-              <span className="category">
-                <a href="">Photography</a>
-              </span>
-              <div className="read-time">
-                <a href="">2 min</a>
+        {sliderThreePost.map((slider) => (
+          <SwiperSlide key={slider.postID}>
+            <div className="slide-content">
+              <h2 className="slide-content__title">
+                <Link to={`/post/${slider.slug}`}>{slider.title}</Link>
+              </h2>
+              <div className="slide-content__meta">
+                <span className="author">
+                  <Link to={`/autor/${slider.authorSlug}`}>{slider.author}</Link>
+                </span>
+                <span className="category">
+                  <Link to={`/kategoria/${slider.categorySlug}`}>{slider.category}</Link>
+                </span>
+                <div className="read-time">
+                  <Link to={`/czas-czytania/${slider.readTime}`}>{slider.readTime} min</Link>
+                </div>
               </div>
+              <Link to={`/post/${slider.slug}`} className="slide-content__btn read-more">
+                Czytaj więcej
+              </Link>
             </div>
-            <a href="" className="slide-content__btn read-more">
-              Read more
-            </a>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <li className="slide-content">
-            <h2 className="slide-content__title">
-              <a href="#">Amazon is adding a 5% fuel and inflation surcharge</a>
-            </h2>
-            <div className="slide-content__meta">
-              <span className="author">By Sarah</span>
-              <span className="category">Ecommerce</span>
-              <div className="read-time">2 min</div>
-            </div>
-            <a href="" className="slide-content__btn read-more">
-              Read more
-            </a>
-          </li>
-        </SwiperSlide>
-        <SwiperSlide>
-          <li className="slide-content">
-            <h2 className="slide-content__title">
-              <a href="#">Decision fatigue is real. Here`s how to reduce it</a>
-            </h2>
-            <div className="slide-content__meta">
-              <span className="author">By Faith</span>
-              <span className="category">Photography</span>
-              <div className="read-time">1 min</div>
-            </div>
-            <a href="" className="slide-content__btn read-more">
-              Read more
-            </a>
-          </li>
-        </SwiperSlide>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );
