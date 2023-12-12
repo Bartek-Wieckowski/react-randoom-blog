@@ -51,3 +51,19 @@ export async function updateCountViewInSupabase(id, viewCount) {
 
   return data;
 }
+
+export async function getMostVisitedPost() {
+  const { data, error } = await supabase
+    .from("randoomBlogPosts")
+    .select("postIDContentful")
+    .not("viewCount", "is", null)
+    .order("viewCount", { ascending: false })
+    .limit(3);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Bład podczas odczytu danych");
+  }
+
+  return data;
+}
