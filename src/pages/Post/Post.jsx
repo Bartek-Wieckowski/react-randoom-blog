@@ -1,6 +1,6 @@
 import "./post.scss";
 import noSetImg from "../../assets/noSetImg.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { usePosts } from "../../contexts/PostsContext";
 import { formatDate } from "../../utils/helpers";
@@ -11,11 +11,14 @@ import MainWrapper from "../../components/MainWrapper/MainWrapper";
 import Spinner from "../../components/Spinner/Spinner";
 import PostsList from "../../components/PostsList/PostsList";
 import CommentForm from "../../components/CommentForm/CommentForm";
+import { selectCurrentPostFromSupabase, updateCountViewInSupabase } from "../../services/apiPosts";
 
 export default function Post() {
   const { slug } = useParams();
   const { isLoading, fetchSinglePost, currentPost } = usePosts();
   const { postID, postRestDetails } = currentPost;
+  const [countView, setCountView] = useState(null);
+  const [hasFetchedData, setHasFetchedData] = useState(false);
 
   const options = {
     renderNode: {
@@ -32,7 +35,35 @@ export default function Post() {
     fetchSinglePost(slug);
   }, [fetchSinglePost, slug]);
 
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchDataAndIncreaseCountView() {
+      try {
+        if (!hasFetchedData) {
+          const initialCountView = await selectCurrentPostFromSupabase(postID);
+          if (isMounted) {
+            setCountView(initialCountView[0]?.viewCount || 0);
+            setHasFetchedData(true);
+          }
+        }
+
+        if (hasFetchedData) {
+          await updateCountViewInSupabase(postID, countView + 1);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    fetchDataAndIncreaseCountView();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [postID, hasFetchedData, countView]);
+
   if (isLoading) return <Spinner type="full-page-spinner" />;
+
   return (
     <div className="single-post" id={postID}>
       <Hero type="hero__normal">
@@ -67,6 +98,11 @@ export default function Post() {
       <MainWrapper>
         <PostsList>
           <article className="single-post__article">
+            <div className="result-visit">
+              <small>
+                Ilosć wyświetleń posta: <span>{countView}</span>
+              </small>
+            </div>
             <figure>
               <img
                 src={postRestDetails?.mainImg.fields.file.url}
@@ -74,6 +110,7 @@ export default function Post() {
                 className="single-post__article--mainImg"
               />
             </figure>
+
             {documentToReactComponents(currentPost.postRestDetails?.content, options)}
             <footer>
               <span className="separator">#tags</span>
