@@ -71,7 +71,7 @@ function PostsProvider({ children }) {
 
         dispatch({ type: "postsPreview/loaded", payload: postsData });
 
-        const contentfulPostIDs = response.items.map((item) => item.sys.id);
+        const contentfulPostIDs = [...new Set(response.items.map((item) => item.sys.id))];
 
         await addPostIDsToSupabase(contentfulPostIDs);
       } catch {
