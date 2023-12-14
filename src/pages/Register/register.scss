@@ -1,7 +1,7 @@
 .register {
   position: relative;
-  min-height: calc(100vh - 80px);
   background-color: var(--main-color);
+  padding: 2rem 0;
 
   &__form-wrapper{
     padding-top: 100px;
