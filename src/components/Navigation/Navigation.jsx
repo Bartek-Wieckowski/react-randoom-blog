@@ -3,16 +3,26 @@ import Logo from "../Logo/Logo";
 import Menu from "../Menu/Menu";
 import Search from "../Search/Search";
 import "./navigation.scss";
+import { useLocation } from "react-router-dom";
 
 export default function Navigation({ onOpenMobileMenu }) {
   const [isFixed, setIsFixed] = useState(false);
+  let location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 600) {
+      if (
+        location.pathname === "/rejestracja" ||
+        location.pathname === "/logowanie" ||
+        location.pathname === "/kontakt"
+      ) {
         setIsFixed(true);
       } else {
-        setIsFixed(false);
+        if (window.scrollY > 600) {
+          setIsFixed(true);
+        } else {
+          setIsFixed(false);
+        }
       }
     };
 
@@ -21,7 +31,7 @@ export default function Navigation({ onOpenMobileMenu }) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [location.pathname]);
 
   const handleToggleMenu = () => {
     onOpenMobileMenu(true);
