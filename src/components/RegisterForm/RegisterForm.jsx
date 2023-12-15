@@ -1,4 +1,4 @@
-import "./register-form.scss";
+import './register-form.scss';
 
 export default function RegisterForm() {
   return (
@@ -7,10 +7,7 @@ export default function RegisterForm() {
       <form action="">
         <div className="wrapper">
           <p>
-            <input type="text" placeholder="Imię" required />
-          </p>
-          <p>
-            <input type="text" placeholder="Nazwisko" required />
+            <input type="text" placeholder="Imię i nazwisko" required />
           </p>
           <p>
             <input type="text" placeholder="Nickname" required />
@@ -26,7 +23,11 @@ export default function RegisterForm() {
           </p>
         </div>
         <p className="co-submit">
-          <input type="submit" value="Wyślij" className="btn submit read-more" />
+          <input
+            type="submit"
+            value="Wyślij"
+            className="btn submit read-more"
+          />
         </p>
       </form>
     </div>
