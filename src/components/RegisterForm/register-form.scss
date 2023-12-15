@@ -3,6 +3,8 @@
   padding: 1rem;
   h3 {
     text-transform: uppercase;
+    text-align: center;
+    padding: 1rem 0;
   }
   form {
     display: flex;
@@ -21,7 +23,7 @@
     }
     input,
     textarea {
-      font-family: "Montserrat";
+      font-family: 'Montserrat';
       width: 100%;
       line-height: 43px;
       outline: 0;
