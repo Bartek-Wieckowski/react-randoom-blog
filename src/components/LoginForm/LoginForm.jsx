@@ -78,13 +78,11 @@ export default function LoginForm() {
         {isLoading ? (
           <Spinner type="small-spinner" />
         ) : (
-          <p className="co-submit">
-            <input
-              type="submit"
-              value="Zaloguj"
-              className="btn submit read-more"
-            />
-          </p>
+          <input
+            type="submit"
+            value="Zaloguj"
+            className="btn submit read-more"
+          />
         )}
       </form>
     </div>
