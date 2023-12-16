@@ -74,19 +74,77 @@ export default function Menu({ onOpenMobileMenu }) {
             )}
           </li>
         ))}
-        {menuUserItems.map((item, index) =>
-          (user && item.hasUserLoggin) || (!user && !item.hasUserLoggin) ? (
-            <li key={index} className="menu__item">
-              <NavLink
-                to={item.to}
-                className="menu__link"
-                onClick={handleCloseMenu}
-              >
-                {item.label}
-              </NavLink>
-            </li>
-          ) : null
-        )}
+        {user &&
+          menuUserItems.map(
+            (item, index) =>
+              item.hasUserLoggin && (
+                <li
+                  key={index}
+                  className={`menu__item ${
+                    item.hasChild ? 'menu__item--has-child' : ''
+                  }`}
+                  ref={item.hasChild ? categoryElementRef : null}
+                >
+                  {item.hasChild ? (
+                    <p
+                      className="menu__link menu__link--category"
+                      onClick={toggleExpandClass}
+                    >
+                      {item.label}
+                    </p>
+                  ) : (
+                    <NavLink
+                      to={item.to}
+                      className={'menu__link'}
+                      onClick={handleCloseMenu}
+                    >
+                      {item.label}
+                    </NavLink>
+                  )}
+                  {item.hasChild && (
+                    <ul className="menu__sub-list">
+                      {item.subItems.map((subItem, subIndex) => (
+                        <li key={subIndex} className="menu__sub-item">
+                          <NavLink
+                            to={subItem.to}
+                            className={`menu__sub-link ${
+                              currentPathname === item.to ? 'active' : ''
+                            }`}
+                            onClick={() => selectedCategory(subItem.slug)}
+                          >
+                            {subItem.label}
+                          </NavLink>
+                        </li>
+                      ))}
+                      <li className="menu__sub-item">
+                        <a
+                          className="menu__sub-link logout"
+                          onClick={() => alert('logout')}
+                        >
+                          Wyloguj
+                        </a>
+                      </li>
+                    </ul>
+                  )}
+                </li>
+              )
+          )}
+        {!user &&
+          menuUserItems.map(
+            (item, index) =>
+              !item.hasUserLoggin &&
+              !item.hasChild && (
+                <li key={index} className="menu__item">
+                  <NavLink
+                    to={item.to}
+                    className="menu__link"
+                    onClick={handleCloseMenu}
+                  >
+                    {item.label}
+                  </NavLink>
+                </li>
+              )
+          )}
       </ul>
     </div>
   );
