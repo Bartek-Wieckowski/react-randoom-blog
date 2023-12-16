@@ -5,13 +5,14 @@ import { usePosts } from '../../contexts/PostsContext';
 import Showcase from '../Showcase/Showcase';
 import { menuItems, menuUserItems } from '../../utils/navigationMenu';
 import { useLogout } from '../../auth/useLogoutHook';
+import { useUser } from '../../auth/useUserHook';
 
 export default function Menu({ onOpenMobileMenu }) {
   const categoryElementRef = useRef(null);
   const { fetchCategoryPost } = usePosts();
   const { pathname: currentPathname } = useLocation();
-  const { logout, isLoading } = useLogout();
-  const user = true;
+  const { logout } = useLogout();
+  const { user } = useUser();
 
   const toggleExpandClass = () => {
     if (categoryElementRef.current) {
