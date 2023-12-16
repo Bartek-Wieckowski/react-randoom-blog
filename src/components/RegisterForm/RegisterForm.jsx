@@ -7,8 +7,11 @@ export default function RegisterForm() {
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
 
-  const handleSignUpForm = ({ fullName, email, password }) => {
-    signup({ fullName, email, password }, { onSettled: () => reset() });
+  const handleSignUpForm = ({ fullName, email, password, nickName }) => {
+    signup(
+      { fullName, email, password, nickName },
+      { onSettled: () => reset() }
+    );
   };
 
   return (
@@ -28,7 +31,12 @@ export default function RegisterForm() {
             <p className="error-text">{errors?.fullName?.message}</p>
           </div>
           <div>
-            <input type="text" id="nickname" placeholder="Nickname" />
+            <input
+              type="text"
+              id="nickName"
+              placeholder="Nickname"
+              {...register('nickName')}
+            />
           </div>
           <div>
             <input
