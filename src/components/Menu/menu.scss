@@ -34,10 +34,10 @@
     position: relative;
     width: 100%;
   }
-  &__link.active{
+  &__link.active {
     animation: pulsateActiveLink 2s infinite;
   }
-  &__sub-link.active{
+  &__sub-link.active {
     animation: pulsateActiveLink 2s infinite;
   }
   &__link,
@@ -65,6 +65,9 @@
   &__sub-link {
     width: 100%;
     font-size: 1em;
+    &.logout {
+      cursor: pointer;
+    }
   }
   &__item--has-child {
     > .menu__link {
@@ -73,7 +76,7 @@
     }
     &::after,
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       width: 5px;
       height: 5px;
