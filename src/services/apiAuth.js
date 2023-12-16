@@ -27,3 +27,10 @@ export async function loginApi({ email, password }) {
   }
   return data;
 }
+
+export async function logoutApi() {
+  const { error } = supabase.auth.signOut();
+  if (error) {
+    throw new Error(error.message);
+  }
+}
