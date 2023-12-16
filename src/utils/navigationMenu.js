@@ -57,7 +57,19 @@ export const menuUserItems = [
   },
   {
     hasUserLoggin: true,
+    hasChild: true,
     label: 'Profil',
-    to: '/profil',
+    subItems: [
+      {
+        label: 'Ustawienia',
+        to: '/profil/ustawienia',
+        slug: 'profil-ustawienia',
+      },
+      {
+        label: 'Historia',
+        to: '/profil/historia',
+        slug: 'profil-historia',
+      },
+    ],
   },
 ];
