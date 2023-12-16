@@ -4,11 +4,13 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { usePosts } from '../../contexts/PostsContext';
 import Showcase from '../Showcase/Showcase';
 import { menuItems, menuUserItems } from '../../utils/navigationMenu';
+import { useLogout } from '../../auth/useLogoutHook';
 
 export default function Menu({ onOpenMobileMenu }) {
   const categoryElementRef = useRef(null);
   const { fetchCategoryPost } = usePosts();
   const { pathname: currentPathname } = useLocation();
+  const { logout, isLoading } = useLogout();
   const user = true;
 
   const toggleExpandClass = () => {
@@ -119,7 +121,7 @@ export default function Menu({ onOpenMobileMenu }) {
                       <li className="menu__sub-item">
                         <a
                           className="menu__sub-link logout"
-                          onClick={() => alert('logout')}
+                          onClick={() => logout()}
                         >
                           Wyloguj
                         </a>
