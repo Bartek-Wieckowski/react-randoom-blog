@@ -1,24 +1,25 @@
-import "./menu.scss";
-import { useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { usePosts } from "../../contexts/PostsContext";
-import Showcase from "../Showcase/Showcase";
-import menuItems from "../../utils/navigationMenu";
+import './menu.scss';
+import { useRef } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { usePosts } from '../../contexts/PostsContext';
+import Showcase from '../Showcase/Showcase';
+import { menuItems, menuUserItems } from '../../utils/navigationMenu';
 
 export default function Menu({ onOpenMobileMenu }) {
   const categoryElementRef = useRef(null);
   const { fetchCategoryPost } = usePosts();
   const { pathname: currentPathname } = useLocation();
+  const user = true;
 
   const toggleExpandClass = () => {
     if (categoryElementRef.current) {
-      categoryElementRef.current.classList.toggle("expand");
+      categoryElementRef.current.classList.toggle('expand');
     }
   };
 
   const handleCloseMenu = () => {
     onOpenMobileMenu(false);
-    document.body.classList.remove("overflowme");
+    document.body.classList.remove('overflowme');
   };
 
   const selectedCategory = (category) => {
@@ -33,15 +34,24 @@ export default function Menu({ onOpenMobileMenu }) {
         {menuItems.map((item, index) => (
           <li
             key={index}
-            className={`menu__item ${item.hasChild ? "menu__item--has-child" : ""}`}
+            className={`menu__item ${
+              item.hasChild ? 'menu__item--has-child' : ''
+            }`}
             ref={item.hasChild ? categoryElementRef : null}
           >
             {item.hasChild ? (
-              <p className="menu__link menu__link--category" onClick={toggleExpandClass}>
+              <p
+                className="menu__link menu__link--category"
+                onClick={toggleExpandClass}
+              >
                 {item.label}
               </p>
             ) : (
-              <NavLink to={item.to} className={"menu__link"} onClick={handleCloseMenu}>
+              <NavLink
+                to={item.to}
+                className={'menu__link'}
+                onClick={handleCloseMenu}
+              >
                 {item.label}
               </NavLink>
             )}
@@ -51,7 +61,9 @@ export default function Menu({ onOpenMobileMenu }) {
                   <li key={subIndex} className="menu__sub-item">
                     <NavLink
                       to={subItem.to}
-                      className={`menu__sub-link ${currentPathname === item.to ? "active" : ""}`}
+                      className={`menu__sub-link ${
+                        currentPathname === item.to ? 'active' : ''
+                      }`}
                       onClick={() => selectedCategory(subItem.slug)}
                     >
                       {subItem.label}
@@ -62,6 +74,19 @@ export default function Menu({ onOpenMobileMenu }) {
             )}
           </li>
         ))}
+        {menuUserItems.map((item, index) =>
+          (user && item.hasUserLoggin) || (!user && !item.hasUserLoggin) ? (
+            <li key={index} className="menu__item">
+              <NavLink
+                to={item.to}
+                className="menu__link"
+                onClick={handleCloseMenu}
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ) : null
+        )}
       </ul>
     </div>
   );
