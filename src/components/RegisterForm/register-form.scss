@@ -59,14 +59,3 @@
     }
   }
 }
-
-@media screen and (min-width: 992px) {
-  .comment-form form .wrapper {
-    flex-direction: row;
-  }
-
-  .comment-form form .wrapper p {
-    flex: 1 0 33.3333%;
-    margin: 0;
-  }
-}

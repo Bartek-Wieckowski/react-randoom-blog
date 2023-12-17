@@ -2,4 +2,66 @@
   padding-top: 100px;
   max-width: 800px;
   margin: 0 auto;
+
+  .user-settings-form {
+    background: var(--light-color);
+    padding: 1rem;
+    h3 {
+      text-transform: uppercase;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+      font-size: 14px;
+
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        margin: 0 -1em;
+        div {
+          padding: 0 1em;
+          margin-bottom: 1.5em;
+        }
+        .error-text {
+          color: rgb(201, 76, 76);
+          font-size: 1rem;
+        }
+      }
+      input,
+      textarea {
+        font-family: 'Montserrat';
+        width: 100%;
+        line-height: 43px;
+        outline: 0;
+        padding: 0 1.5em;
+        border: 1px solid var(--light-color);
+      }
+      .submit {
+        font-size: 12px;
+        font-weight: 500;
+        width: 150px;
+        display: inline-block;
+        text-align: center;
+        line-height: 42px;
+        text-transform: uppercase;
+        -webkit-transition: all 0.3s ease-out;
+        transition: all 0.3s ease-out;
+        box-shadow: var(--main-box-shadow);
+
+        cursor: pointer;
+        background-color: var(--main-color);
+        margin: 2em 0 0;
+        color: white;
+        border-color: transparent;
+        &:hover {
+          background-color: transparent;
+          border-color: var(--main-color);
+          color: var(--main-color);
+        }
+      }
+    }
+  }
 }
