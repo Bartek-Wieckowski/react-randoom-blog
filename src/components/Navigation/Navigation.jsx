@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import Logo from "../Logo/Logo";
-import Menu from "../Menu/Menu";
-import Search from "../Search/Search";
-import "./navigation.scss";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import Logo from '../Logo/Logo';
+import Menu from '../Menu/Menu';
+import Search from '../Search/Search';
+import './navigation.scss';
+import { useLocation } from 'react-router-dom';
 
 export default function Navigation({ onOpenMobileMenu }) {
   const [isFixed, setIsFixed] = useState(false);
@@ -12,9 +12,11 @@ export default function Navigation({ onOpenMobileMenu }) {
   useEffect(() => {
     const handleScroll = () => {
       if (
-        location.pathname === "/rejestracja" ||
-        location.pathname === "/logowanie" ||
-        location.pathname === "/kontakt"
+        location.pathname === '/rejestracja' ||
+        location.pathname === '/logowanie' ||
+        location.pathname === '/kontakt' ||
+        location.pathname === '/profil/ustawienia' ||
+        location.pathname === '/profil/historia'
       ) {
         setIsFixed(true);
       } else {
@@ -26,19 +28,19 @@ export default function Navigation({ onOpenMobileMenu }) {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [location.pathname]);
 
   const handleToggleMenu = () => {
     onOpenMobileMenu(true);
-    document.body.classList.toggle("overflowme");
+    document.body.classList.toggle('overflowme');
   };
 
-  const navFixedClass = isFixed ? "fixed" : "";
+  const navFixedClass = isFixed ? 'fixed' : '';
 
   return (
     <header className={`page-header ${navFixedClass}`}>
@@ -46,7 +48,11 @@ export default function Navigation({ onOpenMobileMenu }) {
         <nav className="nav">
           <Logo />
           <Menu onOpenMobileMenu={onOpenMobileMenu} />
-          <button type="button" className="menu-trigger" onClick={() => handleToggleMenu()}>
+          <button
+            type="button"
+            className="menu-trigger"
+            onClick={() => handleToggleMenu()}
+          >
             <i className="ri-menu-3-line"></i>
             <i className="ri-close-line"></i>
           </button>
