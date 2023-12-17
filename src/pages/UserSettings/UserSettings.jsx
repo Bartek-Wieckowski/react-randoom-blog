@@ -1,5 +1,10 @@
-import "./user-settings.scss";
+import './user-settings.scss';
+import UserSettingsForm from '../../components/UserSettingsForm/UserSettingsForm';
 
 export default function UserSettings() {
-  return <div>UserSettings</div>;
+  return (
+    <section className="user-settings">
+      <UserSettingsForm />
+    </section>
+  );
 }

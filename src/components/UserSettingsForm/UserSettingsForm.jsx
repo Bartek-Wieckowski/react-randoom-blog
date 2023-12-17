@@ -1,5 +1,5 @@
-import "./user-settings-form.scss";
+import './user-settings-form.scss';
 
 export default function UserSettingsForm() {
-  return <div>UserSettingsForm</div>;
+  return <div className="user-settings__form-wrapper">UserSettingsForm</div>;
 }
