@@ -2,21 +2,33 @@ import { useForm } from 'react-hook-form';
 import './comment-form.scss';
 import { useUser } from '../../auth/useUserHook';
 import { usePosts } from '../../contexts/PostsContext';
-import { addCommentCurrentPostAPI } from '../../services/apiComments';
+import {
+  addCommentCurrentPostAPI,
+  getCurrentPostIDfromSupabase,
+} from '../../services/apiComments';
 import { v4 as uuidv4 } from 'uuid';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 export default function CommentForm() {
   const { register, handleSubmit, formState, reset } = useForm();
-  const { errors } = formState;
+  const { errors, isSubmitting } = formState;
   const { user, isAuthenticated } = useUser();
   const { currentPost } = usePosts();
-  const { postID } = currentPost;
+  const { postID: postIdFromContentful } = currentPost;
+  const [initialUserName, setInitialUserName] = useState('');
+
+  const { data: postIdFromSupa } = useQuery({
+    queryKey: ['postIDfromSupa', postIdFromContentful],
+    queryFn: () => getCurrentPostIDfromSupabase(postIdFromContentful),
+  });
 
   const handleCommentSubmit = async (data) => {
     try {
       await addCommentCurrentPostAPI({
         ...data,
-        postIDContentful: postID,
+        postIDContentful: postIdFromContentful,
+        postID: postIdFromSupa[0].id,
         userID: user?.id || uuidv4(),
       });
       reset();
@@ -24,6 +36,20 @@ export default function CommentForm() {
       throw new Error(`Błąd podczas dodawania komenatrza ${error}`);
     }
   };
+
+  useEffect(() => {
+    const loadInitialUserName = async () => {
+      if (isAuthenticated) {
+        const userNameValue =
+          user?.user_metadata.nickName || user?.user_metadata.fullName;
+        setInitialUserName(userNameValue || '');
+      } else {
+        setInitialUserName('anonim_' + Date.now());
+      }
+    };
+
+    loadInitialUserName();
+  }, [isAuthenticated, user]);
 
   return (
     <div className="comment-form">
@@ -35,11 +61,7 @@ export default function CommentForm() {
               type="text"
               placeholder="Imię / nickname"
               id="userName"
-              defaultValue={
-                isAuthenticated
-                  ? user?.user_metadata.nickName || user?.user_metadata.fullName
-                  : 'anonim_' + Date.now()
-              }
+              defaultValue={initialUserName}
               {...register('userName')}
             />
           </div>
@@ -74,6 +96,7 @@ export default function CommentForm() {
             type="submit"
             value="Wyślij"
             className="btn submit read-more"
+            disabled={isSubmitting}
           />
         </p>
       </form>
