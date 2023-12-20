@@ -1,15 +1,17 @@
-import supabase from "../utils/supabaseConfig";
+import supabase from '../utils/supabaseConfig';
 
 export async function addPostIDsToSupabase(contentfulPostIDs) {
   try {
     const existingRecords = await supabase
-      .from("randoomBlogPosts")
-      .select("postIDContentful")
-      .in("postIDContentful", contentfulPostIDs);
+      .from('randoomBlogPosts')
+      .select('postIDContentful')
+      .in('postIDContentful', contentfulPostIDs);
 
     const newPostIDs = contentfulPostIDs.filter(
       (contentfulPostID) =>
-        !existingRecords.data.some((record) => record.postIDContentful === contentfulPostID)
+        !existingRecords.data.some(
+          (record) => record.postIDContentful === contentfulPostID
+        )
     );
 
     if (newPostIDs.length > 0) {
@@ -17,22 +19,25 @@ export async function addPostIDsToSupabase(contentfulPostIDs) {
         postIDContentful: contentfulPostID,
       }));
 
-      await supabase.from("randoomBlogPosts").upsert(newRecords);
+      await supabase.from('randoomBlogPosts').upsert(newRecords);
     }
   } catch (error) {
-    console.error("Błąd podczas dodawania identyfikatorów postów do Supabase:", error.message);
+    console.error(
+      'Błąd podczas dodawania identyfikatorów postów do Supabase:',
+      error.message
+    );
   }
 }
 
 export async function selectCurrentPostFromSupabase(id) {
   const { data, error } = await supabase
-    .from("randoomBlogPosts")
-    .select("viewCount")
-    .eq("postIDContentful", id);
+    .from('randoomBlogPosts')
+    .select('viewCount')
+    .eq('postIDContentful', id);
 
   if (error) {
     console.error(error);
-    throw new Error("Bład podczas odczytu danych");
+    throw new Error('Błąd podczas odczytu danych');
   }
 
   return data;
@@ -40,13 +45,13 @@ export async function selectCurrentPostFromSupabase(id) {
 
 export async function updateCountViewInSupabase(id, viewCount) {
   const { data, error } = await supabase
-    .from("randoomBlogPosts")
+    .from('randoomBlogPosts')
     .update({ viewCount: viewCount })
-    .eq("postIDContentful", id);
+    .eq('postIDContentful', id);
 
   if (error) {
     console.error(error);
-    throw new Error("Bład podczas odczytu danych");
+    throw new Error('Błąd podczas odczytu danych');
   }
 
   return data;
@@ -54,15 +59,15 @@ export async function updateCountViewInSupabase(id, viewCount) {
 
 export async function getMostVisitedPost() {
   const { data, error } = await supabase
-    .from("randoomBlogPosts")
-    .select("postIDContentful")
-    .not("viewCount", "is", null)
-    .order("viewCount", { ascending: false })
+    .from('randoomBlogPosts')
+    .select('postIDContentful')
+    .not('viewCount', 'is', null)
+    .order('viewCount', { ascending: false })
     .limit(3);
 
   if (error) {
     console.error(error);
-    throw new Error("Bład podczas odczytu danych");
+    throw new Error('Błąd podczas odczytu danych');
   }
 
   return data;
