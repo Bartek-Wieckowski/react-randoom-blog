@@ -1,17 +1,20 @@
-import "./post.scss";
-import noSetImg from "../../assets/noSetImg.png";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { usePosts } from "../../contexts/PostsContext";
-import { formatDate } from "../../utils/helpers";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { BLOCKS } from "@contentful/rich-text-types";
-import Hero from "../../components/Hero/Hero";
-import MainWrapper from "../../components/MainWrapper/MainWrapper";
-import Spinner from "../../components/Spinner/Spinner";
-import PostsList from "../../components/PostsList/PostsList";
-import CommentForm from "../../components/CommentForm/CommentForm";
-import { selectCurrentPostFromSupabase, updateCountViewInSupabase } from "../../services/apiPosts";
+import './post.scss';
+import noSetImg from '../../assets/noSetImg.png';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { usePosts } from '../../contexts/PostsContext';
+import { formatDate } from '../../utils/helpers';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { BLOCKS } from '@contentful/rich-text-types';
+import Hero from '../../components/Hero/Hero';
+import MainWrapper from '../../components/MainWrapper/MainWrapper';
+import Spinner from '../../components/Spinner/Spinner';
+import PostsList from '../../components/PostsList/PostsList';
+import CommentForm from '../../components/CommentForm/CommentForm';
+import {
+  selectCurrentPostFromSupabase,
+  updateCountViewInSupabase,
+} from '../../services/apiPosts';
 
 export default function Post() {
   const { slug } = useParams();
@@ -42,7 +45,7 @@ export default function Post() {
         if (!hasFetchedData) {
           const initialCountView = await selectCurrentPostFromSupabase(postID);
           if (isMounted) {
-            setCountView(initialCountView[0]?.viewCount || 0);
+            setCountView(initialCountView[0]?.viewCount);
             setHasFetchedData(true);
           }
         }
@@ -73,7 +76,9 @@ export default function Post() {
             <div className="meta">
               <span className="date">{formatDate(postRestDetails?.date)}</span>
               <span className="category">
-                <Link to={`/kategoria/${postRestDetails?.categorySlug}`}>{postRestDetails?.category}</Link>
+                <Link to={`/kategoria/${postRestDetails?.categorySlug}`}>
+                  {postRestDetails?.category}
+                </Link>
               </span>
               <span className="comment">
                 <Link to="">3 comments</Link>
@@ -89,7 +94,9 @@ export default function Post() {
                 alt={postRestDetails?.author}
               />
               <h4>
-                <Link to={`/autor/${postRestDetails?.authorSlug}`}>{postRestDetails?.author}</Link>
+                <Link to={`/autor/${postRestDetails?.authorSlug}`}>
+                  {postRestDetails?.author}
+                </Link>
               </h4>
             </div>
           </div>
@@ -111,7 +118,10 @@ export default function Post() {
               />
             </figure>
 
-            {documentToReactComponents(currentPost.postRestDetails?.content, options)}
+            {documentToReactComponents(
+              currentPost.postRestDetails?.content,
+              options
+            )}
             <footer>
               <span className="separator">#tags</span>
               <div className="tags">
