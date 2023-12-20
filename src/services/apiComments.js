@@ -1,10 +1,11 @@
 import supabase, { supabaseUrl } from '../utils/supabaseConfig';
 
-export async function addCommentToSupabase(commentData) {
-  const { test } = commentData;
+export async function addCommentCurrentPostAPI(commentData) {
+  const { userName, userEmail, commentContent, postIDContentful, userID } =
+    commentData;
   const { data, error } = await supabase
     .from('randoomBlogComments')
-    .insert([{ some_column: 'someValue' }, { some_column: 'otherValue' }])
+    .insert([{ userName, userEmail, commentContent, postIDContentful, userID }])
     .select();
 
   if (error) {
