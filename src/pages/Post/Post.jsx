@@ -15,6 +15,8 @@ import {
   selectCurrentPostFromSupabase,
   updateCountViewInSupabase,
 } from '../../services/apiPosts';
+import { usePostId } from '../../hooks/usePostIdHook';
+import { usePostNumOfComments } from '../../hooks/usePostNumOfCommentsHook';
 
 export default function Post() {
   const { slug } = useParams();
@@ -22,6 +24,13 @@ export default function Post() {
   const { postID, postRestDetails } = currentPost;
   const [countView, setCountView] = useState(null);
   const [hasFetchedData, setHasFetchedData] = useState(false);
+  const { postIdFromSupa } = usePostId(postID);
+
+  const { numOfComments } = usePostNumOfComments(postIdFromSupa?.[0].id);
+
+  // console.log(numOfComments.length);
+
+  const allCommentsValue = numOfComments?.length;
 
   const options = {
     renderNode: {
@@ -81,7 +90,7 @@ export default function Post() {
                 </Link>
               </span>
               <span className="comment">
-                <Link to="">3 comments</Link>
+                <Link to="">{allCommentsValue} komentarze</Link>
               </span>
             </div>
             <div className="author">

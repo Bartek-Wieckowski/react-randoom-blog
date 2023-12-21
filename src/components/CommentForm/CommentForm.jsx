@@ -1,27 +1,20 @@
-import { useForm } from 'react-hook-form';
 import './comment-form.scss';
+import { useForm } from 'react-hook-form';
 import { useUser } from '../../auth/useUserHook';
 import { usePosts } from '../../contexts/PostsContext';
-import {
-  addCommentCurrentPostAPI,
-  getCurrentPostIDfromSupabase,
-} from '../../services/apiComments';
+import { addCommentCurrentPostAPI } from '../../services/apiComments';
 import { v4 as uuidv4 } from 'uuid';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { usePostId } from '../../hooks/usePostIdHook';
 
 export default function CommentForm() {
+  const [initialUserName, setInitialUserName] = useState('');
   const { register, handleSubmit, formState, reset } = useForm();
   const { errors, isSubmitting } = formState;
   const { user, isAuthenticated } = useUser();
   const { currentPost } = usePosts();
   const { postID: postIdFromContentful } = currentPost;
-  const [initialUserName, setInitialUserName] = useState('');
-
-  const { data: postIdFromSupa } = useQuery({
-    queryKey: ['postIDfromSupa', postIdFromContentful],
-    queryFn: () => getCurrentPostIDfromSupabase(postIdFromContentful),
-  });
+  const { postIdFromSupa } = usePostId(postIdFromContentful);
 
   const handleCommentSubmit = async (data) => {
     try {
