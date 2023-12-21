@@ -35,3 +35,17 @@ export async function getCurrentPostIDfromSupabase(id) {
 
   return data;
 }
+
+export async function getNumberCommentPost(id) {
+  const { data, error } = await supabase
+    .from('randoomBlogComments')
+    .select('*')
+    .eq('postID', id);
+
+  if (error) {
+    console.error(error);
+    throw new Error('Błąd podczas odczytu danych');
+  }
+
+  return data;
+}
