@@ -39,7 +39,7 @@ export async function getCurrentPostIDfromSupabase(id) {
 export async function getNumberCommentPost(id) {
   const { data, error } = await supabase
     .from('randoomBlogComments')
-    .select('*')
+    .select('postID')
     .eq('postID', id);
 
   if (error) {
