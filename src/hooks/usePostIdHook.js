@@ -5,6 +5,7 @@ export function usePostId(postIdFromContentful) {
   const { data: postIdFromSupa } = useQuery({
     queryKey: ['postIdNumOfComments', postIdFromContentful],
     queryFn: () => getCurrentPostIDfromSupabase(postIdFromContentful),
+    enabled: postIdFromContentful !== undefined,
   });
   return { postIdFromSupa };
 }
